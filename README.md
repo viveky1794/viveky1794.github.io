@@ -1,9 +1,4 @@
-# viveky1794.github.io
+# Content of Table
 
-# Hello Vivek
-
-I am good and writting new thing.
-
-theme: jekyll-theme-minima
-
-## This is Demo version
+1. Linux
+	1. [Computer Architecture](Linux/Core/computer_achitecture_part_1)
