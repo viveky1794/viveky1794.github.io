@@ -8,3 +8,8 @@
 2. QNX
 	1. [Virtuliazation Essentials](./QNX/Resources/Notes.md)
 
+3. Zephyer (STM32F407 Discovery)
+	1. Setup
+	2. Learn the basics
+	3. CMake file Rules
+	4. Create minimal project
