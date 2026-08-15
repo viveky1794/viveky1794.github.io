@@ -1,15 +1,39 @@
-# Table of content
+# viveky1794.github.io
 
-1. Linux
-	1. [Computer Architecture](Linux/Core/computer_achitecture_part_1)
-	2. [Direct Memory Access-1](Linux/Core/Linux_DMA.md)
-	3. [Direct Memory Access-2](Linux/Core/Linux_DMA_part-2.md)
-	4. [USB Protocol](Linux/USB_protocol/USB_Protocol/USB_protocol.md)
-2. QNX
-	1. [Virtuliazation Essentials](./QNX/Resources/Notes.md)
+Source for [viveky1794.github.io](https://viveky1794.github.io) — my personal
+site: a short bio/projects landing page plus a working knowledge base of
+Linux and embedded-systems internals notes (computer architecture, memory
+management, caching, scheduling, interrupts, USB, and QNX/virtualization).
 
-3. Zephyer (STM32F407 Discovery)
-	1. Setup
-	2. Learn the basics
-	3. CMake file Rules
-	4. Create minimal project
+## Stack
+
+- [Jekyll](https://jekyllrb.com/) + [Just the Docs](https://just-the-docs.com/)
+  (via `remote_theme`), built by GitHub Pages' standard "deploy from branch"
+  pipeline — no custom Actions workflow needed.
+- Content lives in plain Markdown with Just the Docs front matter
+  (`title`, `parent`, `nav_order`, `description`).
+
+## Running locally
+
+```bash
+bundle install
+bundle exec jekyll serve
+```
+
+Then open `http://localhost:4000`.
+
+## Analytics
+
+`_config.yml` has a placeholder Google Analytics 4 ID
+(`google_analytics: G-XXXXXXXXXX`). To wire up real analytics:
+
+1. Create a GA4 property at [analytics.google.com](https://analytics.google.com)
+   for `viveky1794.github.io` and copy its Measurement ID (`G-XXXXXXXXXX`).
+2. Replace the placeholder in `_config.yml` with that ID.
+3. Optionally, also verify the site in
+   [Google Search Console](https://search.google.com/search-console) to
+   track search visibility.
+
+## License
+
+[MIT](LICENSE)

@@ -1,6 +1,87 @@
+---
+layout: default
+title: USB Protocol
+nav_order: 4
+description: "USB from the Linux driver stack down to the wire: kernel layers, packet types, pipes, device states, and descriptors."
+---
+
+# USB Protocol
+
+Two views of USB: how the Linux kernel's USB stack is layered from user space
+down to the host controller, and how the protocol itself works on the wire —
+packets, pipes, device states, and descriptors. This directly backs the
+custom USB Host/HID stack built on STM32F407 in [Projects](/#projects).
+
+## Linux Kernel USB Stack
+
+### Block Diagram
+
+### USB data flow through Linux Kernel Layers till user space
+
+![usb_protocol_driver_layers](/Linux/USB_protocol/USB_Protocol/images/usb_protocol_driver_layers.png)
+
+### Responsibilities of USB Drivers (Layers wise)
+
+## User Space Layer
+Applications and tools that initiate USB operations.
+
+**Interfaces used:**
+
+    - /dev/bus/usb/*
+    - /sys/bus/usb/
+    - ioctl on usbfs
+    - libusb APIs
+
+## USB Filesystem Interface Layer (usbfs)
+    - Implements usbfs
+    - Handles user-space control/bulk transfers
+    - Used by libusb
+    - Creates /dev/bus/usb/* nodes
+
+## USB Core Layer
+**Device management**
+
+    - Enumeration
+    - Address assignment
+    - Descriptor parsing
+    - Configuration selection
+
+**Driver model integration**
+
+    - Match device ↔ driver
+    - Bind/unbind USB drivers
+
+**Transfer management**
+
+    - URB allocation & lifecycle
+    - Control / Bulk / Interrupt / Isochronous
+
+## USB Class Drivers (Function Drivers)
+    - Parse interface descriptors
+    - Create kernel device nodes
+    - Provide subsystem integration
+
+## USB Bus Drivers (Host Controller Drivers-HCD)
+**Interface to usbcore**
+
+    - Program host controller registers
+    - Manage transfer rings/queues
+    - Convert URBs → hardware TRBs/descriptors
+    - Handle interrupts
+    - DMA handling
+
+## USB PHY & Controller Glue Layer
+    - PHY power control
+    - Link state management
+    - Role switching (host/device/OTG)
+    - SoC glue logic
+
+### USB Data (Packets) formation checks and important points to remember
 
 
-# **Questions :**
+## Protocol Details: Packets, Pipes & Descriptors
+
+### **Questions :**
 
 1@ Explain the USB Protocol and its Features ?
 
@@ -40,14 +121,12 @@ A successful transaction consists of up-to three phases that occur in sequence. 
 
  ```mermaid
  flowchart TB
- 
+
  Transaction-->Token-Packet;
  Transaction-->Data-Packet;
  Transaction-->HandShake-Packet;
- 
+
  ```
-
-
 
 ****************
 
@@ -68,13 +147,7 @@ Token-Packet--->Ping;
 Token-Packet--->Split;
 ```
 
-
-
-
-
  These packets are only sent by host. The packet structure contains a PID byte, 11 bits of address and a 5-bit CRC. Types of token packets :
-
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image001.png)
 
 ​																	*Fig. 2: Image showing Data Format of Token Packets*
 
@@ -90,9 +163,7 @@ With USB2.0, two more packets were added:
 
 • Split – This token is used to communicate to a low/full speed device on a high speed bus
 
- 
-
-**2. Data packets:** 
+**2. Data packets:**
 
 ```mermaid
 flowchart TB
@@ -102,15 +173,7 @@ Data-Packet--->Data-2;
 Data-Packet--->MData;
 ```
 
-
-
-
-
-
-
 Two types of data packets are there, Data0 and Data1. The packet structure contains a PID byte, data field and 16-bit CRC. The data field can carry 0- 1023 bytes of data. Data must be always sent in multiple of bytes.
-
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image002.png)
 
  *Fig. 3: Image showing data format of Data Packets*
 
@@ -122,7 +185,7 @@ Two types of data packets are there, Data0 and Data1. The packet structure conta
 
 After USB2.0, two more types were added Data2 and MData. They are only used in high speed transfer high bandwidth isochronous transfer when there is a need to transfer more than 1024 bytes at 8192 kB/s.
 
-**3. Handshake Packets**: 
+**3. Handshake Packets**:
 
 ```mermaid
 flowchart TB
@@ -133,17 +196,9 @@ HandShake-Packet--->NYET;
 HandShake-Packet--->ERR;
 ```
 
-
-
-
-
 These packets are mostly sent in response to data packets. They simply consist of a PID byte. There are three types of handshake packets :
 
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image003.png)
-
 *Fig. 4: Image showing Data Format of Handshake Packets*
-
- 
 
 • ACK – Acknowledgment for packet received
 
@@ -157,25 +212,13 @@ These packets are mostly sent in response to data packets. They simply consist o
 
 • ERR – Indicating Split transaction failed
 
- 
-
 **4.** **Start of Frame packets (SOF)**:
 
 \------------------------------------------------
 
  The SOF packet consists of an incrementing 11-bit frame number. On a full speed bus, this packet is sent by the host every 1ms and on a high speed bus every 125 us. This packet is used to synchronize isochronous transfer.
 
- 
-
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image004.png)
-
 ​															*Fig. 5: Image showing data Format of Start of Frame packets (SOF)*
-
- 
-
- 
-
- 
 
 **USB Packet Fields**
 
@@ -187,11 +230,7 @@ In USB the LSB of the packet is transmitted first. An USB packet contains differ
 
 **• PID**: PID means Packet ID. It indicates the packet type that is being sent. This field is of 8 bits long. The upper four bits identifies the type of packet and lower four bits are bit-wise compliment of upper four bits. The lower four bits helps in detecting errors.
 
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image005.png)
-
 *Fig. 1: Table Listing USB Packet Fields*
-
- 
 
 **• ADDR**: This field contains the designation address of the USB device. It is of 7 bits, this means it can supports 27 ¬ = 127 devices.
 
@@ -202,18 +241,6 @@ In USB the LSB of the packet is transmitted first. An USB packet contains differ
 For token packets, 5-bit CRC is used and for data packets 16-bit CRC is used
 
 **• EOP**: EOP stands for End of Packet. This field signals the data lines for Single Ended Zero(SE0) for approximately 2 bit times, followed by J state(idle state) for 1 bit time
-
- 
-
- 
-
- 
-
- 
-
- 
-
- 
 
 **Pipes**
 
@@ -226,18 +253,6 @@ There are two types of pipes:
 **• Stream pipes:** These are unidirectional pipes which don’t follow any specific data format. They can be controlled by host or device (peripheral) and support bulk, isochronous and interrupt types of transfer.
 
 The **Default Control pipe** is a special type of message pipe which is bidirectional and supports control transfer type. It uses endpoint 0-IN and endpoint 0-OUT. This pipe can be accessed when a device is plugged in.
-
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image006.jpg)
-
- 
-
- 
-
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image007.gif)
-
- 
-
- 
 
 **Handshaking**
 
@@ -255,10 +270,6 @@ Handshaking is a mechanism to check the success/failure of a request or to check
 
 **• No response**
 
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image008.jpg)
-
- 
-
 **USB Device States**
 
 A USB device can have several possible states as described below:
@@ -275,12 +286,6 @@ A USB device can have several possible states as described below:
 
 **• Suspended State:** The USB device enters the suspended state when the bus remains idle for more than 3mS. In this state, the device must not draw more than 500uA of current.
 
- 
-
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image010.jpg)
-
- 
-
 **Descriptor Types**
 
 There are mainly five types of descriptors
@@ -294,14 +299,6 @@ There are mainly five types of descriptors
 • Endpoint Descriptors
 
 • String Descriptors
-
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image011.png)
-
- 
-
-![img](file:///C:/Users/vivek/AppData/Local/Temp/msohtmlclip1/01/clip_image012.png)
-
- 
 
  **Q : Endpoint Types**
 

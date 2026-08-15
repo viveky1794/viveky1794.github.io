@@ -1,4 +1,20 @@
-# Deadlock
+---
+layout: default
+title: Misc & Kernel Boot
+parent: Linux Internals
+nav_order: 9
+description: "Grab-bag of Linux internals notes: kernel boot sequence, ELF loading, module dependency resolution, deadlocks, and fork/exec/clone."
+---
+
+# Misc & Kernel Boot
+
+Notes that didn't fit neatly into the other sections: how the kernel boots,
+how ELF binaries get loaded, deferred driver probing, and the practical
+differences between `fork()`, `exec()`, and `clone()`.
+
+## Kernel Boot, ELF Loading & Process Creation
+
+### Deadlock
 
 **How deadlocks are recovered in Linux?**
 **How to detect and find out if a program is in deadlock?**
@@ -15,7 +31,7 @@ Because as @daijo explained, say you have two threads `T1` & `T2` and two critic
 **Tools:**
 Valgrind, Lockdep (linux kernel utility)
 
-# Linux kernel Boot
+### Linux kernel Boot
 
 **1. Bootloader prints "Starting kernel..."**
 
@@ -74,11 +90,11 @@ Valgrind, Lockdep (linux kernel utility)
 
 – Mounts root filesystem and launches user-space `init`.
 
-## Final Answer You Can Say
+#### Final Answer You Can Say
 
 > After `Starting kernel...`, the bootloader jumps to the Linux kernel's entry point in assembly (head.S).<br> It sets up the stack, enables MMU, and switches to virtual addressing. Then it jumps to `start_kernel()` in C,<br> which handles memory setup, interrupt controller, and early console.<br> During this, the `printk` function prints the Linux version banner. That's the first message seen from the kernel itself.
 
-## Post-Banner Boot Process
+#### Post-Banner Boot Process
 
 “After the Linux banner is printed, the kernel continues initializing core subsystems.
 
@@ -90,7 +106,7 @@ which eventually executes `/sbin/init`, or the init process from initramfs.
 
 From there, user-space starts, and system services come up.”
 
-# How Programs and Libraries are Loaded into Memory
+### How Programs and Libraries are Loaded into Memory
 
 How Programs and Libraries are Loaded into Memory (Linux, ELF format).
 
@@ -123,9 +139,9 @@ Step	Description
 ✅ All of this is triggered by `execve()` under the hood.
 
 **Dynamic Libraries Loading (.so files)**
-![alt text](./image/Linux_misc/image-1.png)
+![alt text](/Linux/Core/image/Linux_misc/image-1.png)
 
-## Section-2
+#### Section-2
 
 ✅ Microcontrollers (Bare-metal systems)
 In bare-metal systems (no OS) — like STM32, AVR, etc.:
@@ -133,7 +149,7 @@ In bare-metal systems (no OS) — like STM32, AVR, etc.:
 The Flash memory contains the entire program.
 
 Upon reset, startup code (bootloader or crt0.s) does this:
-![1749214449665](image/Linux_IPC_socket/1749214449665.png)
+![1749214449665](/Linux/Core/image/Linux_IPC_socket/1749214449665.png)
 
 🔹 Why is .text executed from Flash?
 Because:
@@ -162,7 +178,7 @@ Pages are marked read-only and executable
 
 So it appears as if .text "came to memory", but it’s actually lazy-loaded (demand paging)
 
-![1749214511297](image/Linux_IPC_socket/1749214511297.png)
+![1749214511297](/Linux/Core/image/Linux_IPC_socket/1749214511297.png)
 
 📌 Linux needs .text in RAM because:
 
@@ -237,7 +253,7 @@ This makes RAM use efficient and scalable, even with many processes.
 **🧠 Summary (Interview-Ready)**
 "Deleting the ELF file of a running program in Linux doesn't crash it immediately because memory-mapped .text pages remain valid as long as they're in memory or the inode is open — but if the program accesses pages that weren’t loaded yet, it can crash."
 
-# Memory Segmentation
+### Memory Segmentation
 
 Segmentation is a memory management technique used by operating systems to divide a program's memory into logical segments such as code, data, stack, etc. Each segment represents a specific type of content or usage and is addressed separately.
 
@@ -249,7 +265,7 @@ Simplify memory sharing between processes
 Handle growing and shrinking segments independently (e.g., stack grows down, heap grows up)
 Each segment is handled and protected separately.
 
-## Section-8
+#### Section-8
 
 🧠 Visual Example
 int *arr = malloc(4 * sizeof(int));  // allocates 16 bytes
@@ -285,7 +301,7 @@ int *arr = malloc(4 * sizeof(int));  // allocates 16 bytes
 | `realloc()` | Resize while preserving contents                       |
 | `free()`    | Always match every `malloc`/`calloc` with `free` |
 
-# Difference between fork, exec and clone 
+### Difference between fork, exec and clone
 
 🔁 fork(), exec(), clone() – At a Glance
 
@@ -355,13 +371,161 @@ After fork():
     Read → shared
     Write → page is duplicated
   Changes in one do not affect the other (unless mmap(MAP_SHARED))
- 
+
  ----------------
 
-# How does system call works ?
+### How does system call works ?
 
-![1751208033953](image/Linux_misc/1751208033953.png)
-![1751208045356](image/Linux_misc/1751208045356.png)
-![1751208052346](image/Linux_misc/1751208052346.png)
-![1751208068256](image/Linux_misc/1751208068256.png)
- 
+![1751208033953](/Linux/Core/image/Linux_misc/1751208033953.png)
+![1751208045356](/Linux/Core/image/Linux_misc/1751208045356.png)
+![1751208052346](/Linux/Core/image/Linux_misc/1751208052346.png)
+![1751208068256](/Linux/Core/image/Linux_misc/1751208068256.png)
+
+## Kernel Module Dependency Resolution (Deferred Probing)
+
+### Linux kernel Module dependecy
+
+Ever wondered how Linux gracefully handles device dependencies during boot when driver probe order isn't predictable?
+
+The Problem: Device discovery (e.g., via Device Tree) doesn't guarantee dependency order. A driver might probe before its required resources—clocks, regulators, GPIO controllers—are ready.
+
+The Solution: Deferred Probing - When a driver needs an unavailable resource, it returns -EPROBE_DEFER instead of failing.
+
+The kernel then:
+
+1. Moves the driver to a deferred list
+2. Retries after each successful probe (when new resources become available)
+3. Eventually, it times out to prevent infinite loops
+
+This mechanism transforms potential boot failures into graceful dependency resolution, allowing complex hardware to initialize reliably regardless of discovery order.
+
+I once debugged a driver that seemed to have perfect DTS matching but whose probe() never seemed to execute. The culprit? Silent -EPROBE_DEFER returns due to a broken clock driver dependency. The driver kept deferring indefinitely without logs, making it appear as if probe() wasn't being called at all!
+
+![1749037601812](/Linux/Core/image/Linux_module/1749037601812.png)
+
+
+## Interview Question Bank: Sockets & Memory Management
+
+A running list of interview/self-study questions on socket programming and
+Linux memory management, collected while prepping for embedded/systems
+interviews. Left as an unanswered checklist deliberately — treat it as
+practice material, not a reference. Items already covered elsewhere on this
+site are linked.
+
+**Socket programming:**
+
+- What is a socket, and what is it used for?
+- How are IP addresses resolved? What's the difference between IPv4 and
+  IPv6, and how does that affect the socket calls?
+- How do you determine what port to connect to? What are common ports, and
+  which ones would you avoid?
+- TCP socket vs. UDP socket — what's the difference, and when would you use
+  each?
+- What sequence of calls establishes a TCP and/or UDP connection, client
+  side and server side? What information does each call need?
+- How do you test whether a socket is ready to be read or written?
+- If a socket closes unexpectedly, how would you detect and handle it?
+- What happens to the connection/thread/process if a socket isn't closed
+  properly?
+- How long does an idle socket connection stay open, and how would you
+  change that?
+- How do you set a socket to non-blocking mode, and when would you want to?
+- What are the considerations when writing a multi-process and/or
+  multi-threaded socket application? Is there more than one way to handle
+  it?
+
+**Memory management — knowledge questions:**
+
+- Difference between logical, physical, and virtual memory in Linux.
+- When do you use `ioremap` vs. `mmap`?
+- Given a known physical address (a register or device address), how do
+  you access it from user space or a kernel driver?
+- What is high/low memory in Linux?
+- Given a connected PCIe device, how do you access its memory from
+  application code?
+- What is a memory map? Describe one from a system you know well.
+- What problem arises when DMA operates on cacheable memory, and how do
+  you solve it? (See [DMA](/linux-internals/dma).)
+- Page tables and how they're handled.
+- L1/L2 cache in Linux. (See [Caching](/linux-internals/caching).)
+- Describe the memory hierarchy (asked in nearly every ops interview).
+- Basic SMP architecture — be able to diagram it.
+- How is memory addressed?
+- [How are programs and libraries loaded into memory?](#kernel-boot-elf-loading-process-creation)
+- On a microcontroller, `.text` executes directly from Flash while `.data`
+  and `.bss` load into SRAM — but on Linux, `.text` is also loaded into RAM
+  as part of the virtual memory mapping. Why?
+- [What is segmentation?](#memory-segmentation)
+- How does the kernel manage its own memory? Kernel memory vs. user memory?
+  What is shared memory?
+- What is paging — what hardware and software mechanisms are involved?
+- What's the difference between physical and virtual memory?
+- What is swapping, and how does it relate to paging?
+- What is thrashing?
+- What are page faults?
+- The `malloc` family: what do these functions do, how do they work, and
+  what are the common pitfalls?
+- The `fork`/`exec`/`clone` family and how each relates to process memory.
+  (See [fork, exec & clone](#difference-between-fork-exec-and-clone).)
+- POSIX shared memory: `mmap`, `shm_open`, `fstat`, and similar.
+- What is DMA, and how does it work? (See [DMA](/linux-internals/dma).)
+- What is a cache vs. a buffer — compare and contrast, with examples of
+  where you'd encounter each. (See [Caching](/linux-internals/caching).)
+
+**Memory management — practical questions:**
+
+- What tools show overall memory utilization and memory-subsystem
+  performance?
+- How do you find an individual process's memory utilization (RSS, VSZ,
+  paging, etc.)?
+- Where are memory-related errors typically logged?
+- What debugging tools help diagnose memory issues, and when would you
+  reach for each (`strace`, `gdb`, `valgrind`, core dumps, etc.)?
+- What process-memory information is available in `/proc`?
+- How can memory subsystem parameters be tuned? What are common changes?
+- Describe the impact of spatial and temporal locality on application
+  performance.
+
+**Memory management — special topics** (niche, but occasionally asked):
+
+- `memtest` and similar hardware diagnostics — when should you suspect a
+  hardware problem?
+- What constitutes effective alerting on memory utilization?
+- What is the OOM killer, and why does it matter?
+- How does containerization relate to memory management?
+- NUMA vs. SMP — how do they differ, and where does each show up?
+- What is copy-on-write (COW), and why did it matter for Linux security
+  around 2016?
+- DMA vs. RDMA — where would you expect to find each?
+- Compare LRU, LFU, MFU, FIFO, and similar page-replacement algorithms.
+- How do Type-1 hypervisors affect a guest's memory subsystem, and where
+  does that become visible? (See [QNX](/qnx).)
+
+## What Is an OS?
+
+### What is OS?
+
+OS is a program which manages computer resources while serving programs.
+Suppose there is not an OS then every program Developer need to write its resource management code also.
+In such case every Application became bulky due to duplicate code.
+Which is clearly violation of **DRY**(Don't repeat yourself) laws.
+OS provides **isolation & Protection**.
+
+### Types of OS
+
+### Difference between Multi-Processing, Multi-Tasking and Multi-Threading ??
+
+**Process** : Program under execution
+
+**Thread** : Light Weight Process
+
+    It is basically a sub process of your program(main process) which can run independently.
+				Threads Uses Process resources. Because they are part of a process. So the concept of OS isolation does 				not apply here.
+
+| Multi-Tasking                                          | Multi-Threading                                                                                                    |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| It is apply only when More then one process available. | It can apply between multiple Threads(sub-process).                                                                |
+| Isolation & Memory Protection ensures by OS.           | No isolation & Memory protection. It is part of a main process. So they use process resources like memory and CPU. |
+| Process Scheduling                                     | Threads scheduling                                                                                                 |
+|                                                        |                                                                                                                    |
+
