@@ -1,5 +1,10 @@
 // Dark color scheme -- slate + lighter blue accent (contrast-adjusted for a
 // dark background), matching the light scheme's brand palette.
+//
+// $color-scheme is required by the theme's own base.scss -- see the note
+// in light.scss for why this can't be omitted.
+
+$color-scheme: dark;
 
 $body-background-color: #0f172a;
 $sidebar-color: #0b1120;
@@ -26,3 +31,5 @@ $grey-lt-000: #1e293b;
 $grey-lt-100: #334155;
 $grey-lt-200: #475569;
 $grey-lt-300: #64748b;
+
+@import "./vendor/accessible-pygments/github-dark";

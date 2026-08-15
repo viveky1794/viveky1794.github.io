@@ -1,8 +1,13 @@
 // Light color scheme -- monochrome + blue accent, per the site's design system.
-// These override Just the Docs' default SCSS variables. Any name that
-// doesn't match the theme's internal variables is simply unused (not a
-// build error), so this degrades gracefully if the theme's variable names
-// have shifted between versions.
+// These override Just the Docs' default SCSS variables.
+//
+// $color-scheme is required by the theme's own base.scss (sets the
+// browser-native `color-scheme` CSS property) -- omitting it is a hard
+// Sass "Undefined variable" build failure, not a harmless no-op. Every
+// variable actually *used* elsewhere in the theme has to be defined here;
+// only unused/misnamed ones are silently ignored.
+
+$color-scheme: light;
 
 $body-background-color: #fafafa;
 $sidebar-color: #ffffff;
@@ -29,3 +34,5 @@ $grey-lt-000: #f4f4f5;
 $grey-lt-100: #e4e4e7;
 $grey-lt-200: #d4d4d8;
 $grey-lt-300: #a1a1aa;
+
+@import "./vendor/accessible-pygments/github-light";
