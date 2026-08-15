@@ -1,35 +1,35 @@
-// Dark color scheme -- slate + lighter blue accent (contrast-adjusted for a
-// dark background), matching the light scheme's brand palette.
+// Dark color scheme -- deep green-charcoal + brighter green accent,
+// matching the light scheme's green + faded-white palette.
 //
 // $color-scheme is required by the theme's own base.scss -- see the note
 // in light.scss for why this can't be omitted.
 
 $color-scheme: dark;
 
-$body-background-color: #0f172a;
-$sidebar-color: #0b1120;
-$body-text-color: #f1f5f9;
+$body-background-color: #10160f;
+$sidebar-color: #0c110c;
+$body-text-color: #e6ece4;
 $body-heading-color: #ffffff;
-$border-color: #334155;
-$table-background-color: #111c34;
-$code-background-color: #1e293b;
+$border-color: #2b352a;
+$table-background-color: #182018;
+$code-background-color: #1c261b;
 $feedback-color: lighten($sidebar-color, 3%);
 
-$link-color: #60a5fa;
-$btn-primary-color: #3b82f6;
-$base-button-color: #1e293b;
+$link-color: #5fbf87;
+$btn-primary-color: #3f9c66;
+$base-button-color: #1c261b;
 
-$nav-child-link-color: #cbd5e1;
-$search-background-color: #111c34;
-$search-result-preview-color: #94a3b8;
+$nav-child-link-color: #b9c7b4;
+$search-background-color: #182018;
+$search-result-preview-color: #93a58e;
 
-$grey-dk-000: #94a3b8;
-$grey-dk-100: #cbd5e1;
-$grey-dk-200: #e2e8f0;
-$grey-dk-300: #f1f5f9;
-$grey-lt-000: #1e293b;
-$grey-lt-100: #334155;
-$grey-lt-200: #475569;
-$grey-lt-300: #64748b;
+$grey-dk-000: #93a58e;
+$grey-dk-100: #b9c7b4;
+$grey-dk-200: #d8e0d5;
+$grey-dk-300: #e6ece4;
+$grey-lt-000: #1c261b;
+$grey-lt-100: #2b352a;
+$grey-lt-200: #3e4a3c;
+$grey-lt-300: #5c6b58;
 
 @import "./vendor/accessible-pygments/github-dark";

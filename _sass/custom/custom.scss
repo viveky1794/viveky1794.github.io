@@ -22,15 +22,69 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
 }
 
-// The header/sidebar mark. Just the Docs constrains .site-logo itself in
-// most versions, but the source PNG is a solid square glyph rather than a
-// pre-padded lockup, so cap its box explicitly to keep it from ever
-// crowding the site title next to it.
-.site-logo,
-.site-title img {
-  max-height: 24px;
-  width: auto;
-  vertical-align: middle;
+// The header/sidebar mark + name (_includes/title.html overrides the
+// theme's own version, which -- with site.logo set -- renders *only* the
+// logo with the name as invisible alt text and nothing visible at all).
+// .site-logo is a `<div>` with a CSS background-image, not an `<img>`, so
+// it needs explicit dimensions -- the theme's own default is
+// `width: 100%; height: 100%` of its flex container, which on an empty
+// div with no other sizing produces zero visible width.
+.site-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.site-logo {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+
+.site-title-text {
+  font-weight: 700;
+  font-size: 1.05rem;
+  white-space: nowrap;
+  color: $body-heading-color;
+}
+
+// Reposition the theme toggle (nav_footer_custom.html) from the bottom of
+// the sidebar to just below the header, above the nav list. .side-bar is a
+// column flex container, so this is a pure ordering change -- no template
+// override needed. Only applies at the desktop (md+) breakpoint; the
+// mobile copy renders in the page footer instead (theme's own layout) and
+// is left where it is.
+@include mq(md) {
+  .site-header {
+    order: -2;
+  }
+
+  .site-footer {
+    order: -1;
+    border-bottom: $border $border-color;
+    padding-bottom: $sp-3;
+    margin-bottom: $sp-3;
+  }
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// The sidebar's own width formula centers the (sidebar + content) block
+// as a unit within the viewport instead of pinning the sidebar to the
+// left edge, which on a wide monitor leaves a dead strip of empty
+// background to the sidebar's left. Pin it properly instead.
+@include mq(lg) {
+  .side-bar {
+    width: $nav-width;
+  }
+
+  .side-bar + .main {
+    margin-left: $nav-width;
+  }
 }
 
 code, pre, kbd, samp,

@@ -1,5 +1,5 @@
-// Light color scheme -- monochrome + blue accent, per the site's design system.
-// These override Just the Docs' default SCSS variables.
+// Light color scheme -- light green + faded white, per the site owner's
+// direction. These override Just the Docs' default SCSS variables.
 //
 // $color-scheme is required by the theme's own base.scss (sets the
 // browser-native `color-scheme` CSS property) -- omitting it is a hard
@@ -9,30 +9,30 @@
 
 $color-scheme: light;
 
-$body-background-color: #fafafa;
-$sidebar-color: #ffffff;
-$body-text-color: #18181b;
-$body-heading-color: #09090b;
-$border-color: #e4e4e7;
+$body-background-color: #f6f5ef;
+$sidebar-color: #f0efe6;
+$body-text-color: #1e261f;
+$body-heading-color: #10160f;
+$border-color: #dde3d7;
 $table-background-color: #ffffff;
-$code-background-color: #f4f4f5;
+$code-background-color: #eef1e8;
 $feedback-color: darken($sidebar-color, 3%);
 
-$link-color: #2563eb;
-$btn-primary-color: #2563eb;
-$base-button-color: #f4f4f5;
+$link-color: #0f7a3d;
+$btn-primary-color: #0f7a3d;
+$base-button-color: #eef1e8;
 
-$nav-child-link-color: #3f3f46;
+$nav-child-link-color: #3d4a3d;
 $search-background-color: #ffffff;
-$search-result-preview-color: #71717a;
+$search-result-preview-color: #5c6b5c;
 
-$grey-dk-000: #71717a;
-$grey-dk-100: #52525b;
-$grey-dk-200: #3f3f46;
-$grey-dk-300: #27272a;
-$grey-lt-000: #f4f4f5;
-$grey-lt-100: #e4e4e7;
-$grey-lt-200: #d4d4d8;
-$grey-lt-300: #a1a1aa;
+$grey-dk-000: #5c6b5c;
+$grey-dk-100: #465046;
+$grey-dk-200: #3d4a3d;
+$grey-dk-300: #232b23;
+$grey-lt-000: #eef1e8;
+$grey-lt-100: #dde3d7;
+$grey-lt-200: #c7d0c0;
+$grey-lt-300: #9aa894;
 
 @import "./vendor/accessible-pygments/github-light";
