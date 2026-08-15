@@ -16,6 +16,17 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
 }
 
+// The header/sidebar mark. Just the Docs constrains .site-logo itself in
+// most versions, but the source PNG is a solid square glyph rather than a
+// pre-padded lockup, so cap its box explicitly to keep it from ever
+// crowding the site title next to it.
+.site-logo,
+.site-title img {
+  max-height: 24px;
+  width: auto;
+  vertical-align: middle;
+}
+
 code, pre, kbd, samp,
 .highlight,
 .search-input {
