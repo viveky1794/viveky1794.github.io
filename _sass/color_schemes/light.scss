@@ -1,0 +1,31 @@
+// Light color scheme -- monochrome + blue accent, per the site's design system.
+// These override Just the Docs' default SCSS variables. Any name that
+// doesn't match the theme's internal variables is simply unused (not a
+// build error), so this degrades gracefully if the theme's variable names
+// have shifted between versions.
+
+$body-background-color: #fafafa;
+$sidebar-color: #ffffff;
+$body-text-color: #18181b;
+$body-heading-color: #09090b;
+$border-color: #e4e4e7;
+$table-background-color: #ffffff;
+$code-background-color: #f4f4f5;
+$feedback-color: darken($sidebar-color, 3%);
+
+$link-color: #2563eb;
+$btn-primary-color: #2563eb;
+$base-button-color: #f4f4f5;
+
+$nav-child-link-color: #3f3f46;
+$search-background-color: #ffffff;
+$search-result-preview-color: #71717a;
+
+$grey-dk-000: #71717a;
+$grey-dk-100: #52525b;
+$grey-dk-200: #3f3f46;
+$grey-dk-300: #27272a;
+$grey-lt-000: #f4f4f5;
+$grey-lt-100: #e4e4e7;
+$grey-lt-200: #d4d4d8;
+$grey-lt-300: #a1a1aa;

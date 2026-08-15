@@ -1,0 +1,28 @@
+// Dark color scheme -- slate + lighter blue accent (contrast-adjusted for a
+// dark background), matching the light scheme's brand palette.
+
+$body-background-color: #0f172a;
+$sidebar-color: #0b1120;
+$body-text-color: #f1f5f9;
+$body-heading-color: #ffffff;
+$border-color: #334155;
+$table-background-color: #111c34;
+$code-background-color: #1e293b;
+$feedback-color: lighten($sidebar-color, 3%);
+
+$link-color: #60a5fa;
+$btn-primary-color: #3b82f6;
+$base-button-color: #1e293b;
+
+$nav-child-link-color: #cbd5e1;
+$search-background-color: #111c34;
+$search-result-preview-color: #94a3b8;
+
+$grey-dk-000: #94a3b8;
+$grey-dk-100: #cbd5e1;
+$grey-dk-200: #e2e8f0;
+$grey-dk-300: #f1f5f9;
+$grey-lt-000: #1e293b;
+$grey-lt-100: #334155;
+$grey-lt-200: #475569;
+$grey-lt-300: #64748b;

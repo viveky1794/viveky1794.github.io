@@ -6,9 +6,13 @@ permalink: /
 description: "Vivek Yadav -- embedded systems engineer working on QNX, Linux internals, ARM SoC bring-up, and power management. Notes and projects."
 ---
 
+<section class="hero" markdown="1">
+
+<p class="hero-eyebrow">Embedded Systems Engineer</p>
+
 # Vivek Yadav
 
-**Embedded Systems Engineer — QNX, Linux & ARM · 9 years**
+<p class="hero-tagline">QNX · Linux Internals · ARM SoC &middot; 9 years</p>
 
 I write low-level software for ARM-based SoCs and microcontrollers, across
 both pre- and post-silicon: Linux device drivers, bare-metal firmware,
@@ -22,49 +26,104 @@ and Cortex-A silicon.
 This site is where I write up what I'm learning as I go — partly so it
 sticks, partly because it's the kind of reference I'd have wanted myself.
 
-[Connect on LinkedIn](https://www.linkedin.com/in/viveky1794){: .btn .btn-primary }
-[Browse the Notes](/linux-internals){: .btn }
+<div class="hero-actions">
+<a href="https://www.linkedin.com/in/viveky1794" class="btn btn-primary" target="_blank" rel="noopener">{% include icon-linkedin.html %} Connect on LinkedIn</a>
+<a href="/linux-internals" class="btn">Browse the Notes {% include icon-arrow-right.html %}</a>
+</div>
+
+</section>
 
 ## Skills
 
-**Languages:** C, C++, Python
-**Platforms:** ARM Cortex-M, ARM Cortex-A, ESP8266/ESP32, STM32F1/F4, 8051, BeagleBone Black, Raspberry Pi
-**Focus areas:** Linux device drivers, bare-metal firmware, BSP development, power management (PMIC, CPUIdle, runtime PM), cache coherency, memory management
-**Protocols:** I2C, USART, SPI, USB (host & device)
-**Tools:** Git/Gerrit, JTAG (Trace32), GDB, Buildroot, U-Boot, Yocto, STM32Cube, PyQt5
+<div class="skills-grid" markdown="1">
+
+<div class="skill-group" markdown="1">
+**Languages**
+C · C++ · Python
+</div>
+
+<div class="skill-group" markdown="1">
+**Platforms**
+ARM Cortex-M · ARM Cortex-A · ESP8266/ESP32 · STM32F1/F4 · 8051 · BeagleBone Black · Raspberry Pi
+</div>
+
+<div class="skill-group" markdown="1">
+**Focus Areas**
+Linux device drivers · Bare-metal firmware · BSP development · Power management (PMIC, CPUIdle, runtime PM) · Cache coherency · Memory management
+</div>
+
+<div class="skill-group" markdown="1">
+**Protocols**
+I2C · USART · SPI · USB (host & device)
+</div>
+
+<div class="skill-group" markdown="1">
+**Tools**
+Git/Gerrit · JTAG (Trace32) · GDB · Buildroot · U-Boot · Yocto · STM32Cube · PyQt5
+</div>
+
+</div>
 
 ## Projects
 
-Things I've built, beyond the write-ups:
+Things I've built, beyond the write-ups.
 
-### Custom USB Host/HID Stack (STM32F407)
+<div class="project-grid" markdown="1">
+
+<div class="project-card" markdown="1">
+
+### Custom USB Host/HID Stack
+
+<p class="project-eyebrow">STM32F407</p>
+
 A from-scratch USB Host driver and printer class on the STM32 HAL, receiving
 data over USART and forwarding it across USB to drive generic USB printers.
 Extended into a full USB HID implementation supporting three device
 classes — barcode scanner, receipt printer, and a custom keyboard — for a
 point-of-sale hardware integration. Background reading:
 [USB Protocol](/linux-internals/usb-protocol).
-{: .d-inline-block }
-`C` `STM32 HAL` `USB Host` `HID`
-{: .label .label-blue }
+
+<div class="tag-row">
+<span class="tag">C</span><span class="tag">STM32 HAL</span><span class="tag">USB Host</span><span class="tag">HID</span>
+</div>
+
+</div>
+
+<div class="project-card" markdown="1">
 
 ### PMIC Control GUI
+
+<p class="project-eyebrow">Bring-Up Tooling</p>
+
 A PyQt5 desktop tool for controlling and monitoring power delivery over
 PMBus/I2C during ASIC bring-up — built to streamline the SoC design team's
 workflow and give RTL/PV engineers a tailored way to exercise the power
 management hardware without hand-written I2C scripts.
-{: .d-inline-block }
-`Python` `PyQt5` `I2C / PMBus` `Power Management`
-{: .label .label-blue }
+
+<div class="tag-row">
+<span class="tag">Python</span><span class="tag">PyQt5</span><span class="tag">I2C / PMBus</span><span class="tag">Power Management</span>
+</div>
+
+</div>
+
+<div class="project-card" markdown="1">
 
 ### OpenCV Warehouse Item Locator
+
+<p class="project-eyebrow">Computer Vision</p>
+
 An OpenCV application driving a standard projector to highlight the correct
 box in large warehouse racks, cutting item-retrieval time and error rate for
 warehouse operators by projecting directly onto the physical shelf instead
 of relying on a handheld screen.
-{: .d-inline-block }
-`Python` `OpenCV` `Computer Vision`
-{: .label .label-blue }
+
+<div class="tag-row">
+<span class="tag">Python</span><span class="tag">OpenCV</span><span class="tag">Computer Vision</span>
+</div>
+
+</div>
+
+</div>
 
 ## Notes
 
@@ -72,8 +131,24 @@ A working knowledge base of Linux and embedded-systems internals, written
 as I dig into each topic — not a tutorial series, more a set of references
 I keep coming back to.
 
-- **[Linux Internals](/linux-internals)** — computer architecture, memory &
-  virtual memory, caching, process/threading, scheduling, interrupts, DMA,
-  USB, and kernel boot.
-- **[QNX](/qnx)** — virtualization and hypervisor fundamentals, growing
-  alongside my current platform work.
+<div class="project-grid" markdown="1">
+
+<div class="project-card" markdown="1">
+
+### [Linux Internals](/linux-internals)
+
+Computer architecture, memory & virtual memory, caching, process/threading,
+scheduling, interrupts, DMA, USB, and kernel boot.
+
+</div>
+
+<div class="project-card" markdown="1">
+
+### [QNX](/qnx)
+
+Virtualization and hypervisor fundamentals, growing alongside my current
+platform work.
+
+</div>
+
+</div>
