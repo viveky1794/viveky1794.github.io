@@ -1,10 +1,14 @@
 ---
 layout: home
 title: Home
-nav_exclude: true
+nav_order: 1
 permalink: /
 description: "Vivek Yadav -- embedded systems engineer working on QNX, Linux internals, ARM SoC bring-up, and power management. Notes and projects."
 ---
+
+<div class="hero-row" markdown="1">
+
+<div class="hero-text" markdown="1">
 
 # Vivek Yadav
 {: .fs-9 }
@@ -22,11 +26,14 @@ Linux drivers, PMIC/CPUIdle power management, and board bring-up on Cortex-M
 and Cortex-A silicon.
 {: .fs-5 }
 
-This site is where I write up what I'm learning as I go — partly so it
-sticks, partly because it's the kind of reference I'd have wanted myself.
-
 [Connect on LinkedIn](https://www.linkedin.com/in/viveky1794){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank" rel="noopener" }
 [Browse the Notes](/linux-internals){: .btn .fs-5 .mb-4 .mb-md-0 }
+
+</div>
+
+<img src="/assets/images/vivek.jpg" alt="Photo of Vivek Yadav" class="hero-photo">
+
+</div>
 
 ---
 

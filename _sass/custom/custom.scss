@@ -66,6 +66,40 @@ input:focus-visible {
   margin-right: 0.35em;
 }
 
+// ---- Hero -------------------------------------------------------------
+
+.hero-row {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-text {
+  flex: 1 1 420px;
+  min-width: 280px;
+}
+
+.hero-photo {
+  flex: none;
+  width: 176px;
+  height: 176px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid $border-color;
+  margin: 0 auto;
+}
+
+@media (max-width: 46rem) {
+  .hero-row {
+    flex-direction: column-reverse;
+  }
+  .hero-photo {
+    width: 140px;
+    height: 140px;
+  }
+}
+
 // ---- Skills ---------------------------------------------------------
 
 .skills-grid {

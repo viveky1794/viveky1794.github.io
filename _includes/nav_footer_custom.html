@@ -1,0 +1,39 @@
+<button type="button" class="btn theme-toggle-btn" style="width: 100%; margin-top: 1rem;" aria-label="Toggle dark mode">
+  <span class="theme-toggle-label">Dark mode</span>
+</button>
+
+<script>
+// This include is rendered twice by the theme -- once for the desktop
+// sidebar, once for the mobile footer (see components/sidebar.html and
+// components/footer.html) -- so this script block also runs twice, and
+// the second button doesn't exist in the DOM yet when the first one
+// runs. Event delegation on `document` sidesteps both problems: one
+// listener handles clicks on either button regardless of parse order,
+// and the init guard keeps it from being attached twice.
+(function() {
+  if (!window.jtd || window.__themeToggleInit) { return; }
+  window.__themeToggleInit = true;
+
+  function updateLabels() {
+    var isDark = jtd.getTheme() === 'dark';
+    document.querySelectorAll('.theme-toggle-label').forEach(function(label) {
+      label.textContent = isDark ? 'Light mode' : 'Dark mode';
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest && e.target.closest('.theme-toggle-btn');
+    if (!btn) { return; }
+    var next = jtd.getTheme() === 'dark' ? 'light' : 'dark';
+    jtd.setTheme(next);
+    try { localStorage.setItem('jtd-color-scheme', next); } catch (err) {}
+    updateLabels();
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLabels);
+  } else {
+    updateLabels();
+  }
+})();
+</script>

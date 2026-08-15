@@ -1,0 +1,10 @@
+// Structural variable overrides. Loaded before the theme's own defaults
+// (support/support.scss) get a chance to apply their `!default`, per Just
+// the Docs' documented customization mechanism -- this is the correct
+// place to override layout variables like $content-width, not
+// _sass/custom/custom.scss (that runs too late for defaults like this).
+
+// Default is 50rem (800px), which reads as very narrow on a real monitor
+// -- the site barely used the available width. Widened sitewide (docs
+// pages benefit too on large screens), not just on the homepage.
+$content-width: 70rem;

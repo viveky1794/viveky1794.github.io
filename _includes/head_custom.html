@@ -4,3 +4,17 @@
 
 <link rel="icon" type="image/png" href="{{ '/assets/images/favicon.png' | relative_url }}">
 <link rel="apple-touch-icon" href="{{ '/assets/images/favicon.png' | relative_url }}">
+
+<script>
+// Restore the visitor's saved light/dark preference before first paint.
+// just-the-docs.js (which defines jtd.setTheme) is guaranteed to have
+// already loaded by this point -- see _includes/head.html's include order.
+(function() {
+  try {
+    var saved = localStorage.getItem('jtd-color-scheme');
+    if (saved && window.jtd && jtd.setTheme) {
+      jtd.setTheme(saved);
+    }
+  } catch (e) {}
+})();
+</script>
