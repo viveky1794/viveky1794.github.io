@@ -139,7 +139,7 @@ Step	Description
 ✅ All of this is triggered by `execve()` under the hood.
 
 **Dynamic Libraries Loading (.so files)**
-![alt text](/Linux/Core/image/Linux_misc/image-1.png)
+![alt text](/assets/images/notes/Linux_misc/image-1.png)
 
 #### Section-2
 
@@ -149,7 +149,7 @@ In bare-metal systems (no OS) — like STM32, AVR, etc.:
 The Flash memory contains the entire program.
 
 Upon reset, startup code (bootloader or crt0.s) does this:
-![1749214449665](/Linux/Core/image/Linux_IPC_socket/1749214449665.png)
+![1749214449665](/assets/images/notes/Linux_IPC_socket/1749214449665.png)
 
 🔹 Why is .text executed from Flash?
 Because:
@@ -178,7 +178,7 @@ Pages are marked read-only and executable
 
 So it appears as if .text "came to memory", but it’s actually lazy-loaded (demand paging)
 
-![1749214511297](/Linux/Core/image/Linux_IPC_socket/1749214511297.png)
+![1749214511297](/assets/images/notes/Linux_IPC_socket/1749214511297.png)
 
 📌 Linux needs .text in RAM because:
 
@@ -376,10 +376,10 @@ After fork():
 
 ### How does system call works ?
 
-![1751208033953](/Linux/Core/image/Linux_misc/1751208033953.png)
-![1751208045356](/Linux/Core/image/Linux_misc/1751208045356.png)
-![1751208052346](/Linux/Core/image/Linux_misc/1751208052346.png)
-![1751208068256](/Linux/Core/image/Linux_misc/1751208068256.png)
+![1751208033953](/assets/images/notes/Linux_misc/1751208033953.png)
+![1751208045356](/assets/images/notes/Linux_misc/1751208045356.png)
+![1751208052346](/assets/images/notes/Linux_misc/1751208052346.png)
+![1751208068256](/assets/images/notes/Linux_misc/1751208068256.png)
 
 ## Kernel Module Dependency Resolution (Deferred Probing)
 
@@ -401,7 +401,7 @@ This mechanism transforms potential boot failures into graceful dependency resol
 
 I once debugged a driver that seemed to have perfect DTS matching but whose probe() never seemed to execute. The culprit? Silent -EPROBE_DEFER returns due to a broken clock driver dependency. The driver kept deferring indefinitely without logs, making it appear as if probe() wasn't being called at all!
 
-![1749037601812](/Linux/Core/image/Linux_module/1749037601812.png)
+![1749037601812](/assets/images/notes/Linux_module/1749037601812.png)
 
 
 ## Interview Question Bank: Sockets & Memory Management

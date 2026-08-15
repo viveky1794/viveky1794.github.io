@@ -66,13 +66,16 @@ google_analytics: G-XXXXXXXXXX
 twitter:
   card: summary
 
-# README.md is the GitHub-facing repo readme, not a site page.
-# The Gemfile/Gemfile.lock and dev-only files shouldn't be built either.
+# README.md is the GitHub-facing repo readme, not a site page. design/ and
+# sources/ are repo-only artifacts (logo design deliverables, raw
+# excalidraw/docx working files) -- not meant to be served as site pages.
 exclude:
   - README.md
   - Gemfile
   - Gemfile.lock
   - LICENSE
   - zephyr-project/
+  - design/
+  - sources/
   - vendor/
   - node_modules/

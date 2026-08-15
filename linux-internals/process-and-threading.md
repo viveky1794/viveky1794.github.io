@@ -29,7 +29,7 @@ The process is the running instance of a program which occupies space in memory 
 - The **Heap** is used for the dynamic memory allocation and is managed via calls to new, delete, malloc, free, etc.
 - The **Stack** is used for local variables. Space on the stack is reserved for local variables when they are declared.
 
-![1748664478020](/Linux/Core/image/Linux_Process/1748664478020.png)
+![1748664478020](/assets/images/notes/Linux_Process/1748664478020.png)
 
 #### Process vs Program
 
@@ -54,7 +54,7 @@ Processes in the operating system can be in any of the following states:
 - `WAITING`- The process is waiting for some event to occur(such as an I/O completion or reception of a signal).
 - `TERMINATED`- The process has finished execution.
 
-![different process state](/Linux/Core/image/image.png)
+![different process state](/assets/images/notes/image.png)
 
 ### Types of Processes
 
@@ -160,7 +160,7 @@ There is a Process Control Block for each process, enclosing all the information
 - **Accounting information**: The User and kernel CPU time consumed, account numbers, limits, etc.
 - **I/O Status information**: Devices allocated, open file tables, etc.
 
-![1749038108556](/Linux/Core/image/Linux_Process/1749038108556.png)
+![1749038108556](/assets/images/notes/Linux_Process/1749038108556.png)
 
 
 ## The Process Table
@@ -214,124 +214,124 @@ The entry of all the PCBs of the current processes is in Process Table. The Proc
 ### Understanding Processes in Operating Systems
 Out focus is now shifting toward lower-level concepts more closely related to operating systems, such as CPU scheduling, threads, paging, and virtual memory. The challenge with these topics is that all of them are deeply tied to a concept we haven’t yet covered in detail.
 
-![1750040691891](/Linux/Core/image/Linux_process_part_1/1750040691891.png)
+![1750040691891](/assets/images/notes/Linux_process_part_1/1750040691891.png)
 
 Today we’re going to dive into the technical details of processes. As we discussed in my previous video, a process is informally defined as a program in execution, meaning that these two concepts are not the same. A program is a passive entity, such as an executable file that we can launch to start running. When we run a program, what happens internally is that its executable file is loaded into memory. At this point, our program becomes a process.
 
 The execution of this process, though, might require additional memory to store user input and temporary results. The operating system is responsible for allocating that memory. The memory assigned to it has a special name: the address space of the process.
 
-![1750040838159](/Linux/Core/image/Linux_process_part_1/1750040838159.png)
+![1750040838159](/assets/images/notes/Linux_process_part_1/1750040838159.png)
 
 We’ll return to this concept later in the video, so keep it in mind. A process, however, is more than just its address space. As we know, modern operating systems use concurrency, allowing multiple processes to execute by alternating access to computer resources. Internally, alternating access to the CPU is achieved by placing processes in a queue. We'll understand how this works by the end of this video.
 
-![1750040902137](/Linux/Core/image/Linux_process_part_1/1750040902137.png)
+![1750040902137](/assets/images/notes/Linux_process_part_1/1750040902137.png)
 
-![1750040932523](/Linux/Core/image/Linux_process_part_1/1750040932523.png)
+![1750040932523](/assets/images/notes/Linux_process_part_1/1750040932523.png)
 
 The key point now is that at any given moment, only one process can use the CPU, while all others wait their turn. Remember, the CPU has internal components like general-purpose registers, the instruction register, the address register (also known as the program counter), the stack pointer, and even flags. When a process gains access to the CPU, it uses these components to manipulate and move data. This is what running a program essentially is, as we've covered in previous episodes.
-![1750041016968](/Linux/Core/image/Linux_process_part_1/1750041016968.png)
+![1750041016968](/assets/images/notes/Linux_process_part_1/1750041016968.png)
 
 But, alternating CPU access between multiple processes is not as simple as it sounds. If we simply switch processes, the process that gains access to the CPU would find itself in a CPU state belonging to the previous process. This leads to two major issues:
-![1750041161219](/Linux/Core/image/Linux_process_part_1/1750041161219.png)
+![1750041161219](/assets/images/notes/Linux_process_part_1/1750041161219.png)
 
 First, this is a severe security risk since the current process could access sensitive information from the previous process. I mean, imagine if the previous process was hashing a password; part of that password could still be stored in the registers. Nothing would stop the current process from reading that information for malicious purposes. So, the **first concern here is security.**
 
 Now, let’s assume that all processes are honest and won’t use the information from a previous process. Does that solve all the problems? Well… no. Even if the current process has no intention of using that information, it still needs to manipulate the registers to carry out its own tasks. In doing so, it alters the CPU state of the previous process. So, when the previous process regains CPU access later, the CPU state it had when it was interrupted would be lost. So, the second concern here is **correctness of execution.**
-![1750085095660](/Linux/Core/image/Linux_process_part_1/1750085095660.png)
-![1750085103305](/Linux/Core/image/Linux_process_part_1/1750085103305.png)
+![1750085095660](/assets/images/notes/Linux_process_part_1/1750085095660.png)
+![1750085103305](/assets/images/notes/Linux_process_part_1/1750085103305.png)
 
-![1750085376877](/Linux/Core/image/Linux_process_part_1/1750085376877.png)
+![1750085376877](/assets/images/notes/Linux_process_part_1/1750085376877.png)
 
 This might be a bit difficult to follow, so let me show you an example. Let’s say we want to run two programs. When compiled to assembly, they look something like this. To be executed by the computer, the code must first be compiled into machine code. Since binary can be hard to follow, we’ll show the instructions in assembly for educational purposes. Let’s assume that both programs are launched at the same time. To run them, they are loaded into memory. And for simplicity, let’s also say the concurrency model used by the operating system allows each process to execute up to two instructions before switching CPU access to a different process.
-![1750085393944](/Linux/Core/image/Linux_process_part_1/1750085393944.png)
+![1750085393944](/assets/images/notes/Linux_process_part_1/1750085393944.png)
 
-![1750085423254](/Linux/Core/image/Linux_process_part_1/1750085423254.png)
+![1750085423254](/assets/images/notes/Linux_process_part_1/1750085423254.png)
 
 To start executing the first process, the operating system sets the program counter so the CPU can begin fetching instructions for that process. The first instruction tells the CPU to load the value 12 into register 0. That’s one instruction. This process can still execute one more instruction before the operating system reallocates the CPU to the second process.The second instruction tells the CPU to load the value 20 into register 1. That completes two instructions.
-![1750085497757](/Linux/Core/image/Linux_process_part_1/1750085497757.png)
-![1750085506263](/Linux/Core/image/Linux_process_part_1/1750085506263.png)
-![1750085512776](/Linux/Core/image/Linux_process_part_1/1750085512776.png)
-![1750085529947](/Linux/Core/image/Linux_process_part_1/1750085529947.png)
-![1750085539097](/Linux/Core/image/Linux_process_part_1/1750085539097.png)
-![1750085545773](/Linux/Core/image/Linux_process_part_1/1750085545773.png)
-![1750085556822](/Linux/Core/image/Linux_process_part_1/1750085556822.png)
-![1750085566904](/Linux/Core/image/Linux_process_part_1/1750085566904.png)
-![1750085584899](/Linux/Core/image/Linux_process_part_1/1750085584899.png)
+![1750085497757](/assets/images/notes/Linux_process_part_1/1750085497757.png)
+![1750085506263](/assets/images/notes/Linux_process_part_1/1750085506263.png)
+![1750085512776](/assets/images/notes/Linux_process_part_1/1750085512776.png)
+![1750085529947](/assets/images/notes/Linux_process_part_1/1750085529947.png)
+![1750085539097](/assets/images/notes/Linux_process_part_1/1750085539097.png)
+![1750085545773](/assets/images/notes/Linux_process_part_1/1750085545773.png)
+![1750085556822](/assets/images/notes/Linux_process_part_1/1750085556822.png)
+![1750085566904](/assets/images/notes/Linux_process_part_1/1750085566904.png)
+![1750085584899](/assets/images/notes/Linux_process_part_1/1750085584899.png)
 
 At this point, the operating system sets the program counter so the CPU can start executing the second process.
 Now that the program counter points to the executable code of the second process, we can say the CPU is allocated to it.
-![1750085604904](/Linux/Core/image/Linux_process_part_1/1750085604904.png)
+![1750085604904](/assets/images/notes/Linux_process_part_1/1750085604904.png)
 
 Note that while the second process now has control of the CPU, the data the first process was working with is still present in the registers. Again, we assume this second process is not malicious and will mind its own business. The first instruction of the second process tells the CPU to load the value 100 into register 0. That’s one instruction.
-![1750085747889](/Linux/Core/image/Linux_process_part_1/1750085747889.png)
+![1750085747889](/assets/images/notes/Linux_process_part_1/1750085747889.png)
 The next instruction tells the CPU to load the value 35 into register 1. Now two consecutive instructions have been executed, so the operating system must reallocate the CPU back to the first process.
-![1750085839613](/Linux/Core/image/Linux_process_part_1/1750085839613.png)
+![1750085839613](/assets/images/notes/Linux_process_part_1/1750085839613.png)
 
 For this, it needs to set the program counter to the correct address so the first process can continue exactly where it left off.
 
 But… first mistake! We didn’t store that address anywhere before allocating the CPU to the second process, so now we can’t resume the first process. Here’s where things start to go wrong. Let’s assume that the operating system had saved the program counter value and is able to restore it properly. The first process regains control of the CPU and continues execution from where it was interrupted. Now the third instruction is telling the CPU to add the values currently held in registers 0 and 1, which are supposed to be 12 and 20, respectively. However, since the second process modified the registers during its execution, the CPU will now add the wrong numbers. The CPU, simply following instructions, has no way of knowing what happened, so it will continue executing the process using the incorrect data.
-![1750085938158](/Linux/Core/image/Linux_process_part_1/1750085938158.png)
-![1750085964313](/Linux/Core/image/Linux_process_part_1/1750085964313.png)
-![1750085970272](/Linux/Core/image/Linux_process_part_1/1750085970272.png)
-![1750085999324](/Linux/Core/image/Linux_process_part_1/1750085999324.png)
-![1750086009593](/Linux/Core/image/Linux_process_part_1/1750086009593.png)
+![1750085938158](/assets/images/notes/Linux_process_part_1/1750085938158.png)
+![1750085964313](/assets/images/notes/Linux_process_part_1/1750085964313.png)
+![1750085970272](/assets/images/notes/Linux_process_part_1/1750085970272.png)
+![1750085999324](/assets/images/notes/Linux_process_part_1/1750085999324.png)
+![1750086009593](/assets/images/notes/Linux_process_part_1/1750086009593.png)
 
 And problems don’t stop there. In this example, the first process overwrites the value in register 0 during the addition. So, when the operating system reallocates the CPU to the second process, its CPU state will also be altered. In a similar way, the second process will continue executing, but it will end up not only adding the wrong values but also storing the wrong result. In the end, we’ve managed to mess up both processes' results. Where the first process should have produced 32, it now gives us 135. And where the second process should have produced 135, it instead gives us 170. Perhaps the worst part here is that these wrong values are not deterministic.
-![1750086064621](/Linux/Core/image/Linux_process_part_1/1750086064621.png)
-![1750086115941](/Linux/Core/image/Linux_process_part_1/1750086115941.png)
+![1750086064621](/assets/images/notes/Linux_process_part_1/1750086064621.png)
+![1750086115941](/assets/images/notes/Linux_process_part_1/1750086115941.png)
 For example, if we had added a third process, or if the second program was launched even a few milliseconds later, we would’ve seen completely different wrong results. This problem becomes a nightmare when we consider that modern computers handle hundreds of processes at once. And to make matters worse, in practice, it is extremely difficult to predict the exact order in which processes will execute, as we’ll learn in the CPU scheduling video.
 
 Ok, but then, **how do operating systems ensure security and correctness** when dealing with multiple processes? Well… the solution requires extra steps. Let’s use the same example: two processes start at the same time. We still allow each process to execute. For the first process, it loads the value 12 into register 0 and then the value 20 into register 1. After this, the CPU must be allocated to the second process. But instead of simply overwriting the address register to make the CPU jump to the executable code of the second process, the operating system first runs a special routine to capture the current state of the CPU—like taking a snapshot. The purpose of this is to copy the contents of the registers, flags, and program counter into memory so that when the process regains control of the CPU, the state it had when it was interrupted can be restored.
-![1750086330276](/Linux/Core/image/Linux_process_part_1/1750086330276.png)
-![1750086347462](/Linux/Core/image/Linux_process_part_1/1750086347462.png)
+![1750086330276](/assets/images/notes/Linux_process_part_1/1750086330276.png)
+![1750086347462](/assets/images/notes/Linux_process_part_1/1750086347462.png)
 
 The operating system keeps a copy of the CPU state for every single process running on the computer. Right after the CPU state of the interrupted process is captured and safely stored, the CPU state of the next process is restored. In this case, since the second process hasn’t executed any instructions yet, all of its registers are set to zero, except for the program counter, which points to the next instruction the process should execute. At this moment, that would be the first instruction at memory location 1013.
 
-![1750086371932](/Linux/Core/image/Linux_process_part_1/1750086371932.png)
-![1750086475863](/Linux/Core/image/Linux_process_part_1/1750086475863.png)
+![1750086371932](/assets/images/notes/Linux_process_part_1/1750086371932.png)
+![1750086475863](/assets/images/notes/Linux_process_part_1/1750086475863.png)
 Now, the second process starts executing, loading the value 100 into register 0 and the value 35 into register 1. After two instructions, it is interrupted to allow the CPU to be reallocated to the first process. But once again, before doing that, the CPU state of the second process is captured and safely stored. Only after storing this information does the operating system retrieve the state of the first process and copy it into the corresponding registers in the CPU.
 
 By doing this, each time a process regains control of the CPU, it will find the registers exactly as they were when it was interrupted. This process resolves both problems. A process can no longer access the information the previous process was using, and since its own state hasn’t been altered by the other process, it can continue execution with the confidence that it is working with the correct data. This action of capturing the CPU state of a process and restoring the state of a different process so it can continue **execution is known as a context switch.** And this is how operating systems guarantee security and correctness when sharing the CPU among multiple processes.
-![1750086619713](/Linux/Core/image/Linux_process_part_1/1750086619713.png)
-![1750086638928](/Linux/Core/image/Linux_process_part_1/1750086638928.png)
-![1750086663008](/Linux/Core/image/Linux_process_part_1/1750086663008.png)
-![1750086699902](/Linux/Core/image/Linux_process_part_1/1750086699902.png)
+![1750086619713](/assets/images/notes/Linux_process_part_1/1750086619713.png)
+![1750086638928](/assets/images/notes/Linux_process_part_1/1750086638928.png)
+![1750086663008](/assets/images/notes/Linux_process_part_1/1750086663008.png)
+![1750086699902](/assets/images/notes/Linux_process_part_1/1750086699902.png)
 
 Ok, so, now we already know that a process has an address space, a program counter, and registers, which can be informally defined as the CPU state of the process. But what else does a process have? Well, a process might also have a list of open files, as well as I/O devices allocated to it. This is the simplest way we can visualize a process. As you can see, instead of being a single entity, a process is this entire context, isolated from other processes. And that’s the best way we can describe a process with a single word: a context. This is why the kernel routine we learned about earlier is called a context switch. When we switch processes, we are replacing the entire context in which the system operates. This also explains, from a high-level perspective, why multiple processes can have the same executable instructions but still produce different results when executed. It’s not only about the instructions but also the context in which those instructions are executed.
-![1750086806731](/Linux/Core/image/Linux_process_part_1/1750086806731.png)
-![1750086826820](/Linux/Core/image/Linux_process_part_1/1750086826820.png)
+![1750086806731](/assets/images/notes/Linux_process_part_1/1750086806731.png)
+![1750086826820](/assets/images/notes/Linux_process_part_1/1750086826820.png)
 
 Have you ever asked someone a question and received the reply, “In what context?” When someone responds this way, it’s because the same question can have different answers depending on the situation. The question that arises now is: if a process is this entire context, from low-level components like registers to higher-level things like a list of files, how can we put them in a queue? I mean, a process isn’t like an object we can simply use as an element in a data structure. So, how do we manage this? The answer is the PCB.
 
 In this case, PCB stands for Process Control Block, a special structure the operating system uses to keep track of every single process. Since every process is unique, it requires an identifier, known as a process ID. A process also has a state, which can be any of several possible statuses. We’ll discuss these in more detail shortly.
-![1750086982934](/Linux/Core/image/Linux_process_part_1/1750086982934.png)
+![1750086982934](/assets/images/notes/Linux_process_part_1/1750086982934.png)
 In addition, a process has a program counter, a list of general-purpose registers, an instruction register, and flags. Depending on the hardware, a process might also have a stack pointer, index registers, accumulators, and other components I won’t list here. This is what I informally refer to as the CPU state of the process.
 
-![1750089570252](/Linux/Core/image/Linux_process_part_1/1750089570252.png)
+![1750089570252](/assets/images/notes/Linux_process_part_1/1750089570252.png)
 
 Do you remember that a context switch requires capturing the CPU state for each process? Well, this is where that data is stored.
-![1750089594874](/Linux/Core/image/Linux_process_part_1/1750089594874.png)
-![1750089671484](/Linux/Core/image/Linux_process_part_1/1750089671484.png)
+![1750089594874](/assets/images/notes/Linux_process_part_1/1750089594874.png)
+![1750089671484](/assets/images/notes/Linux_process_part_1/1750089671484.png)
 
 Regarding memory, the operating system must also track all the memory blocks allocated to each process. Remember when we mentioned that each process has its own address space? Well, running multiple programs concurrently introduces a new security issue because, without extra precautions, any process could potentially read from or write to the address space of another process. The operating system needs to be aware of these boundaries to intercept any malicious memory access.
-![1750089717382](/Linux/Core/image/Linux_process_part_1/1750089717382.png)
+![1750089717382](/assets/images/notes/Linux_process_part_1/1750089717382.png)
 
 Additionally, when a new process is created, the operating system needs to be aware of the address space of each existing process to correctly allocate an available memory region for the new process.
-![1750089762587](/Linux/Core/image/Linux_process_part_1/1750089762587.png)
-![1750089781416](/Linux/Core/image/Linux_process_part_1/1750089781416.png)
-![1750089788575](/Linux/Core/image/Linux_process_part_1/1750089788575.png)
+![1750089762587](/assets/images/notes/Linux_process_part_1/1750089762587.png)
+![1750089781416](/assets/images/notes/Linux_process_part_1/1750089781416.png)
+![1750089788575](/assets/images/notes/Linux_process_part_1/1750089788575.png)
 Therefore, the Process Control Block should contain memory management information, at least including the memory limits of each process's address space. And here we can also add other resources allocated to the process, such as a list of I/O devices or open files.
-![1750089817495](/Linux/Core/image/Linux_process_part_1/1750089817495.png)
+![1750089817495](/assets/images/notes/Linux_process_part_1/1750089817495.png)
 
 Now, the structure you’re seeing is just an example. If you want to see a real implementation, we can look at the source code of the Linux kernel under this path. The first interesting thing to note is that the structure is called a task, not a process. I’m not a kernel expert, but I think it’s called that because Linux was originally inspired by Unix, where it was said that computers ran tasks. I might be mistaken though, so feel free to correct me in the comments if I’m wrong.
 
 **The reason it is called this way is because Linux uses the term "task" to represent the fundamental unit of execution, encompassing both threads and processes within a single data structure, effectively treating them as the same entity for scheduling purposes.** Another interesting thing I noticed when reviewing the implementation is that the Process Control Block (PCB) contains a pointer to the PCB of the parent process, as well as a list of all the processes created by the process represented by the struct. So, I guess we could add that detail to our example. Again, I want to emphasize that the Process Control Block is not the process itself, but rather a representation of the process. It serves as a repository for all the data needed to start or resume a process, along with some accounting information. And this representation is what is actually placed in a queue.
-![1750089997659](/Linux/Core/image/Linux_process_part_1/1750089997659.png)
-![1750090019169](/Linux/Core/image/Linux_process_part_1/1750090019169.png)
+![1750089997659](/assets/images/notes/Linux_process_part_1/1750089997659.png)
+![1750090019169](/assets/images/notes/Linux_process_part_1/1750090019169.png)
 
 And at this point, we should be ready to dive into CPU scheduling, a topic for a future episode. Finally, keep in mind that everything we’ve covered in this video is valid for single processor systems and multicore systems. The only difference is that multicore systems can operate with multiple contexts at the same time due to each core having its own execution pipeline.
-![1750090102544](/Linux/Core/image/Linux_process_part_1/1750090102544.png)
-![1750090115178](/Linux/Core/image/Linux_process_part_1/1750090115178.png)
+![1750090102544](/assets/images/notes/Linux_process_part_1/1750090102544.png)
+![1750090115178](/assets/images/notes/Linux_process_part_1/1750090115178.png)
 
 
 ## Threads vs Processes
@@ -351,8 +351,8 @@ And at this point, we should be ready to dive into CPU scheduling, a topic for a
 | If one server process is blocked then other server processes cannot execute until the first process is unblocked. | If one thread is blocked and waiting then the second thread in the same task can run. |
 |                                               Uses more resources.                                               |                                 Uses fewer resources.                                 |
 
-![1749192297755](/Linux/Core/image/Linux_Thread_vs_Process/1749192297755.png)
-![1749192417733](/Linux/Core/image/Linux_Thread_vs_Process/1749192417733.png)
+![1749192297755](/assets/images/notes/Linux_Thread_vs_Process/1749192297755.png)
+![1749192417733](/assets/images/notes/Linux_Thread_vs_Process/1749192417733.png)
 
 ***Thread stacks can be located anywhere in the `process's virtual address space.`
 They are managed by the kernel via mmap, and there's no requirement for them to be within or between the main thread's stack and heap.***
@@ -377,27 +377,27 @@ They are managed by the kernel via mmap, and there's no requirement for them to 
 
 ### Understanding Threads and Concurrency
 
-![1750004805879](/Linux/Core/image/Linux_thread-part-1/1750004805879.png)
+![1750004805879](/assets/images/notes/Linux_thread-part-1/1750004805879.png)
 
-![1750004818167](/Linux/Core/image/Linux_thread-part-1/1750004818167.png)
+![1750004818167](/assets/images/notes/Linux_thread-part-1/1750004818167.png)
 
 But multitasking is only the well-known purpose of concurrency and CPU scheduling. There's another, less obvious purpose: maximizing the use of computer resources. We'll dive deeper into this in my video about CPU scheduling. For now, what we need to know is that while a process is often defined as a program in execution, it doesn't necessarily mean the process is always using the CPU. Even if the CPU is allocated to that process, for example, a process might be waiting for an I/O resource. In that scenario, allocating the CPU to that process would be inefficient because it can't execute instructions until the requested I/O resource is ready. So instead, it makes sense to allocate the CPU to a different process—one that's ready to execute instructions.
 
-![1750004889100](/Linux/Core/image/Linux_thread-part-1/1750004889100.png)
+![1750004889100](/assets/images/notes/Linux_thread-part-1/1750004889100.png)
 
-![1750004918441](/Linux/Core/image/Linux_thread-part-1/1750004918441.png)
+![1750004918441](/assets/images/notes/Linux_thread-part-1/1750004918441.png)
 
-![1750004973079](/Linux/Core/image/Linux_thread-part-1/1750004973079.png)
+![1750004973079](/assets/images/notes/Linux_thread-part-1/1750004973079.png)
 
 This is the second reason why concurrency is so important: it's not just about running multiple programs at once; it's also about filling those little gaps when a process can't use the CPU by assigning it to another process that can. Up **until now, in this series, we've treated processes as the fundamental unit of execution, so we've assumed there's nothing more basic than a process for scheduling purposes. So we can't employ concurrency for executable entities within the same process.**
 
 If this sounds confusing, what I'm trying to say is that tasks within the same program, like two functions, for example, cannot run asynchronously under the traditional process approach. This makes sense if you've watched my video on processes. Remember, each process has one program counter that points to the instruction where it is interrupted when the CPU is allocated to another process. But we cannot alternate the CPU between two functions that are part of the same process because, with a single program counter, we can't keep track of where both are interrupted. One of the functions must wait for the other to finish executing.
 
-![1750005042962](/Linux/Core/image/Linux_thread-part-1/1750005042962.png)
+![1750005042962](/assets/images/notes/Linux_thread-part-1/1750005042962.png)
 
-![1750005077003](/Linux/Core/image/Linux_thread-part-1/1750005077003.png)
+![1750005077003](/assets/images/notes/Linux_thread-part-1/1750005077003.png)
 
-![1750005083978](/Linux/Core/image/Linux_thread-part-1/1750005083978.png)
+![1750005083978](/assets/images/notes/Linux_thread-part-1/1750005083978.png)
 
 **But why would we need concurrency inside a process in the first place? I mean, if we wanted two pieces of code to run concurrently and cooperate, couldn't we just put that code in separate processes and use interprocess communication to coordinate their actions? Well, yes, but using IPC isn't always intuitive. Sometimes different pieces of code that contribute to a main goal are so correlated that putting them in different processes just feels wrong. There are many situations where concurrency within a process is incredibly useful.**
 
@@ -405,38 +405,38 @@ Think about a server that receives requests on port 3000, where its sole purpose
 
 If five requests arrive at approximately the same time, the server will accept the first one quickly but then spend significant time processing it. The second request will only be handled once the first is completed, and so on. This creates a bottleneck, with later requests waiting a long time to be attended to. Now, with five requests, the bottleneck is not that much of a problem, but imagine a thousand requests, and here we can see the real problem. Notice the gray gaps in the timeline; these represent periods where the CPU sits idle, doing nothing. This is wasted computational time—time that could have been used to accept and begin processing other clients' requests. When one task is unable to execute because another task is running, despite the two being independent, we call it a blocking effect.
 
-![1750005157525](/Linux/Core/image/Linux_thread-part-1/1750005157525.png)
+![1750005157525](/assets/images/notes/Linux_thread-part-1/1750005157525.png)
 
-![1750005147983](/Linux/Core/image/Linux_thread-part-1/1750005147983.png)
+![1750005147983](/assets/images/notes/Linux_thread-part-1/1750005147983.png)
 
-![1750005227199](/Linux/Core/image/Linux_thread-part-1/1750005227199.png)
+![1750005227199](/assets/images/notes/Linux_thread-part-1/1750005227199.png)
 
 For a long time, the solution to this problem was as follows: there's a main process that listens for requests, which we'll call the Listener process. Every time a client sends a request, instead of handling it directly, the Listener process creates a whole new process to attend to that specific client. This way, if another client sends a request, it won't wait until the previous request is completely handled because the process that listens and accepts the requests runs concurrently with the one serving the previous client. In other words, this method allows taking advantage of concurrency to use the CPU as much as possible.
 
-![1750005288727](/Linux/Core/image/Linux_thread-part-1/1750005288727.png)
+![1750005288727](/assets/images/notes/Linux_thread-part-1/1750005288727.png)
 
-![1750005296951](/Linux/Core/image/Linux_thread-part-1/1750005296951.png)
+![1750005296951](/assets/images/notes/Linux_thread-part-1/1750005296951.png)
 
 While clever, this approach isn't perfect. Remember, each process is like a self-contained context with its own properties, including an address space. Creating an entire process for every client might work for a few hundred clients, but when scaling to thousands, it becomes inefficient in terms of memory usage. Additionally, spawning a new process is not a trivial operation; it consumes processing time. So even though the goal is to utilize idle CPU gaps, a portion of that time is actually spent creating the new process itself. Moreover, if the server needs to handle some kind of global state, all child processes must be synchronized to keep track of it. This requires some form of IPC, complicating the implementation.
 
-![1750005353927](/Linux/Core/image/Linux_thread-part-1/1750005353927.png)
+![1750005353927](/assets/images/notes/Linux_thread-part-1/1750005353927.png)
 
-![1750005390903](/Linux/Core/image/Linux_thread-part-1/1750005390903.png)
+![1750005390903](/assets/images/notes/Linux_thread-part-1/1750005390903.png)
 
 **Although processes are one of the most important concepts in computer science, they aren't perfect.**  the concept of a process, which is very useful. We can't just discard it, but we can modify it slightly to allow concurrency within the executable code of a single process. Remember, in general terms, a process comprises an ID, a program counter, a register set, an address space, and other resources such as open files and I/O devices. As I explained earlier, the main limitation is that a single program counter doesn't allow the process control block—the structure the OS uses to represent processes—to keep track of more than one task at a time.
 
 The solution is to stop associating the program counter directly with the process and instead assign a program counter to each inner executable entity that we want to run concurrently within the process. These inner entities are what we call threads. By no longer limiting each process to a single program counter, we can now create a new thread whenever we need code within the same process to run concurrently. This solves the blocking problem without creating new processes. If one of the threads needs an I/O resource, such as loading the contents of a file into an array, the other threads can continue executing without being blocked.
 
-![1750005525488](/Linux/Core/image/Linux_thread-part-1/1750005525488.png)
+![1750005525488](/assets/images/notes/Linux_thread-part-1/1750005525488.png)
 
-![1750005558296](/Linux/Core/image/Linux_thread-part-1/1750005558296.png)
+![1750005558296](/assets/images/notes/Linux_thread-part-1/1750005558296.png)
 
-![1750005647530](/Linux/Core/image/Linux_thread-part-1/1750005647530.png)
+![1750005647530](/assets/images/notes/Linux_thread-part-1/1750005647530.png)
 
 While threads share the entire address space base of the process they belong to, they cannot share a CPU state. Because threads are going to be interrupted to allocate the CPU to other threads, we need to capture the state of each thread so that when the CPU is reallocated, its state can be restored. Therefore, if each thread has its own program counter, it also must have its own register set, flags, accumulators, etc.—essentially its own CPU state. And note that this includes a separate stack pointer. Remember, the stack is a fast and efficient way to organize and access local variables in memory. If two functions in the same process run concurrently and share the same stack, they could easily overwrite each other's data. Hence, each thread must have its own stack.
-![1750005961813](/Linux/Core/image/Linux_thread-part-1/1750005961813.png)
+![1750005961813](/assets/images/notes/Linux_thread-part-1/1750005961813.png)
 
-![1750005979628](/Linux/Core/image/Linux_thread-part-1/1750005979628.png)
+![1750005979628](/assets/images/notes/Linux_thread-part-1/1750005979628.png)
 
 **Something that I want to make sure is very clear is that the fact that each thread has its own stack doesn't mean that they cannot read from or write to each other's. This makes perfect sense if we consider the address space as a property of the process, not the threads. Since the stacks are located within that shared address space, nothing prevents a thread from accessing another thread's stack.** Whether you should do it or not is a completely different discussion, but generally, unless you really know what you're doing, it's best to avoid accessing other threads' stacks directly.
 
@@ -446,19 +446,19 @@ Completely discarding the concept of a process, address spaces of different proc
 
 So instead of describing concurrency as alternating CPU access between processes, threads, or both, we can simply describe it as alternating tasks. This implementation is more intuitive if we want to use a single scheduler for threads and processes. Regardless of the approach, doing this requires that every process has at least one thread called the main thread. Whenever a new process is created, the operating system automatically creates this thread. So even if a process doesn't rely on multi-threading, the operating system can allocate the CPU to it by scheduling its main thread. Whether a process starts with a fixed number of additional threads or can spawn threads dynamically depends on the operating system's implementation. Most mainstream operating systems prefer the dynamic approach, where each process starts as a single-threaded process and additional threads are created at runtime if needed. This, of course, increases the complexity of the operating system's internal implementation, as it must provide system calls for dynamic thread creation. But it's the preferred method because, in many cases, it's impossible to know at compile time how many threads will be needed at runtime.
 
-![1750006028549](/Linux/Core/image/Linux_thread-part-1/1750006028549.png)
+![1750006028549](/assets/images/notes/Linux_thread-part-1/1750006028549.png)
 
-![1750006047825](/Linux/Core/image/Linux_thread-part-1/1750006047825.png)
+![1750006047825](/assets/images/notes/Linux_thread-part-1/1750006047825.png)
 
-![1750006053091](/Linux/Core/image/Linux_thread-part-1/1750006053091.png)
+![1750006053091](/assets/images/notes/Linux_thread-part-1/1750006053091.png)
 
-![1750006059564](/Linux/Core/image/Linux_thread-part-1/1750006059564.png)
+![1750006059564](/assets/images/notes/Linux_thread-part-1/1750006059564.png)
 
-![1750006066674](/Linux/Core/image/Linux_thread-part-1/1750006066674.png)
+![1750006066674](/assets/images/notes/Linux_thread-part-1/1750006066674.png)
 
-![1750006088569](/Linux/Core/image/Linux_thread-part-1/1750006088569.png)
+![1750006088569](/assets/images/notes/Linux_thread-part-1/1750006088569.png)
 
-![1750006197616](/Linux/Core/image/Linux_thread-part-1/1750006197616.png)
+![1750006197616](/assets/images/notes/Linux_thread-part-1/1750006197616.png)
 
 Okay, that's a lot of information! Before we discuss how all of this applies to our server example, there's one last thing we need to know. In many implementations, because the main thread identifies the process it belongs to, if other threads are spawned and the main thread terminates its execution, the execution of all the other threads will immediately terminate. There are multiple ways to handle this problem, but that's a topic for another video.
 
@@ -468,24 +468,24 @@ And that being said, we should now define what a thread is. But first, we'll def
 
 **If you're wondering if threads accessing this memory area at the same time is dangerous, it's not, because executable code and constants reside in the text and data sections—two regions that are never written to. All the information pertinent to a specific thread generated at runtime resides either on the stack or the heap. So threads accessing the same executable code concurrently is perfectly safe.**
 
-![1750007008206](/Linux/Core/image/Linux_thread-part-1/1750007008206.png)
+![1750007008206](/assets/images/notes/Linux_thread-part-1/1750007008206.png)
 
-![1750007279524](/Linux/Core/image/Linux_thread-part-1/1750007279524.png)
+![1750007279524](/assets/images/notes/Linux_thread-part-1/1750007279524.png)
 
-![1750007286480](/Linux/Core/image/Linux_thread-part-1/1750007286480.png)
+![1750007286480](/assets/images/notes/Linux_thread-part-1/1750007286480.png)
 
-![1750007318244](/Linux/Core/image/Linux_thread-part-1/1750007318244.png)
+![1750007318244](/assets/images/notes/Linux_thread-part-1/1750007318244.png)
 
-![1750007328505](/Linux/Core/image/Linux_thread-part-1/1750007328505.png)
+![1750007328505](/assets/images/notes/Linux_thread-part-1/1750007328505.png)
 
 Perhaps this last part helps you understand why, in low-level languages like C, spawning a thread requires us to pass a pointer to a function as a parameter. This might seem confusing, but what we're actually doing is passing the memory address where the code that the thread will execute begins. So please don't misinterpret my animations: threads are not asynchronous functions.
 
-![1750007366635](/Linux/Core/image/Linux_thread-part-1/1750007366635.png)
-![1750007380997](/Linux/Core/image/Linux_thread-part-1/1750007380997.png)
-![1750007411543](/Linux/Core/image/Linux_thread-part-1/1750007411543.png)
-![1750007091618](/Linux/Core/image/Linux_thread-part-1/1750007091618.png)
-![1750007162624](/Linux/Core/image/Linux_thread-part-1/1750007162624.png)
-![1750007175607](/Linux/Core/image/Linux_thread-part-1/1750007175607.png)
+![1750007366635](/assets/images/notes/Linux_thread-part-1/1750007366635.png)
+![1750007380997](/assets/images/notes/Linux_thread-part-1/1750007380997.png)
+![1750007411543](/assets/images/notes/Linux_thread-part-1/1750007411543.png)
+![1750007091618](/assets/images/notes/Linux_thread-part-1/1750007091618.png)
+![1750007162624](/assets/images/notes/Linux_thread-part-1/1750007162624.png)
+![1750007175607](/assets/images/notes/Linux_thread-part-1/1750007175607.png)
 
 There are two ways we can define threads. From the operating system's point of view, threads are what processes were in our previous episode: the most basic unit of execution. From a developer's perspective, threads are a mechanism to tell the operating system that certain pieces of code inside our program can be executed concurrently. Another interesting definition that I've heard is that threads can be seen as lightweight processes—easier and faster to create.
 
@@ -568,59 +568,59 @@ In the last episode, we learned about threads, which are very useful when writin
 
 So, threads are simply a way to tell the operating system that multiple tasks within the same process can run concurrently. They enable applications to perform multiple tasks at the same time. For example, in an email client app, we need to display the user interface on the screen while listening for the user keystrokes, while uploading an attachment like a photo from your file system, while performing grammar checking, and while monitoring for incoming emails. In order to provide a good user experience, none of these tasks should wait for each other to complete.
 
-![1750012342805](/Linux/Core/image/Linux_thread-part-2/1750012342805.png)
-![1750012380478](/Linux/Core/image/Linux_thread-part-2/1750012380478.png)
+![1750012342805](/assets/images/notes/Linux_thread-part-2/1750012342805.png)
+![1750012380478](/assets/images/notes/Linux_thread-part-2/1750012380478.png)
 
 Implementing concurrency has some challenges, though. If the number of concurrent tasks increases too much, at some point, the system won't feel smooth anymore. Even if the CPU alternates between tasks extremely quickly, there comes a point where there are so many tasks that it takes too long for each one to regain access to the CPU. To address this, there are three possible solutions. The most obvious would be to simply make the CPU faster. If the CPU can handle more work in the same amount of time, tasks can regain access to it more quickly. This solution, though, isn't perfect because if we keep increasing the number of tasks, we will eventually end up back where we started: too many tasks causing delays. Plus, making CPUs faster has become increasingly difficult over the last decade.
 
 The second solution would be to schedule CPU access in a more clever way. This is a more complicated solution that deserves its own video. The third solution, like the first one, is more of a brute force approach: if a single processor can't handle too many tasks, no matter how fast it is, just add more processors. This can be achieved in several ways: by adding more CPU sockets to the same motherboard, allowing for multiple physical CPUs, or by including multiple processing units within a single package or chip, known as multi-core processors. And, though less common, by combining multiple multi-core chips in the same motherboard.
 
-![1750012947748](/Linux/Core/image/Linux_thread-part-2/1750012947748.png)
+![1750012947748](/assets/images/notes/Linux_thread-part-2/1750012947748.png)
 
-![1750013009439](/Linux/Core/image/Linux_thread-part-2/1750013009439.png)
+![1750013009439](/assets/images/notes/Linux_thread-part-2/1750013009439.png)
 
-![1750013052506](/Linux/Core/image/Linux_thread-part-2/1750013052506.png)
-![1750013068630](/Linux/Core/image/Linux_thread-part-2/1750013068630.png)
+![1750013052506](/assets/images/notes/Linux_thread-part-2/1750013052506.png)
+![1750013068630](/assets/images/notes/Linux_thread-part-2/1750013068630.png)
 
 The terminology around processors can get a bit ambiguous. The term CPU is often used to refer to the entire package or chip; however, each core inside the package works as an independent processing unit, essentially a CPU that shares some components, like the cache, with other cores. In any case, each core appears as a separate processor to the operating system. So, if you heard the term "cores" a lot in this video, you know what I mean.
 
 An application with eight threads on a system with a single computing core means that concurrency merely means that the execution of the threads will be interleaved over time because the processing core is capable of executing only one thread at a time.
 
-![1750013211283](/Linux/Core/image/Linux_thread-part-2/1750013211283.png)
+![1750013211283](/assets/images/notes/Linux_thread-part-2/1750013211283.png)
 
 But on a system with multiple cores, concurrency takes on a new meaning. Here, some threads can truly run at the same time because the system can assign each thread to a separate core. In other words, with multiple cores, we're no longer just dealing with concurrency; we're dealing with parallelism.
 
-![1750013259486](/Linux/Core/image/Linux_thread-part-2/1750013259486.png)
+![1750013259486](/assets/images/notes/Linux_thread-part-2/1750013259486.png)
 
-![1750013271109](/Linux/Core/image/Linux_thread-part-2/1750013271109.png)
+![1750013271109](/assets/images/notes/Linux_thread-part-2/1750013271109.png)
 
 Notice the distinction between concurrency and parallelism in this discussion. A concurrent system supports more than one task by allowing all the tasks to make some progress. In contrast, a parallel system can perform more than one task truly simultaneously. Thus, it is possible to have concurrency without parallelism. One of the main advantages in parallel systems is that the smoothness of multitasking becomes less reliant on the illusion created by fast interleaving. Suddenly, it makes even more sense why virtually all modern operating systems consider threads, rather than processes, as the basic unit of execution. With multi-core processors now the standard, threads within the same process can take full advantage of parallelism.
-![1750013939065](/Linux/Core/image/Linux_thread-part-2/1750013939065.png)
-![1750013947334](/Linux/Core/image/Linux_thread-part-2/1750013947334.png)
-![1750013812816](/Linux/Core/image/Linux_thread-part-2/1750013812816.png)
+![1750013939065](/assets/images/notes/Linux_thread-part-2/1750013939065.png)
+![1750013947334](/assets/images/notes/Linux_thread-part-2/1750013947334.png)
+![1750013812816](/assets/images/notes/Linux_thread-part-2/1750013812816.png)
 
 For us as programmers, this means that if we want to run tasks in parallel, all we need to do is declare those tasks as concurrent using threads. The operating system will handle the rest, interleaving the CPU between threads if no additional core is available or assigning one core to each thread if the system runs on a multi-core processor. This makes our programs more portable since we don't have to compile for a specific number of cores. Just always consider two important things: the number of cores is fixed, so creating a thousand threads doesn't mean that a thousand tasks will run in parallel. Instead, if the system has n cores, up to n threads can execute in parallel at any given time. And pay attention to this: up to n, because threads compete for resources. Even if we create the exact number of threads as the number of cores available, threads from other processes also need CPU time. Since one of the main goals of the operating system is to ensure fair distribution of CPU resources across all threads, it limits how many of our own threads can run in parallel.
 
-![1750013887429](/Linux/Core/image/Linux_thread-part-2/1750013887429.png)
-![1750013899065](/Linux/Core/image/Linux_thread-part-2/1750013899065.png)
+![1750013887429](/assets/images/notes/Linux_thread-part-2/1750013887429.png)
+![1750013899065](/assets/images/notes/Linux_thread-part-2/1750013899065.png)
 
 With that being said, let's discuss another reason why we might need parallelism in our programs: performance. This one is pretty obvious. If we can truly run more than one task at the same time, we can significantly reduce the total time it would take to complete those tasks compared to running them sequentially on a single-core system.
 
 In general, there are two types of parallelism: data parallelism and task parallelism. Data parallelism focuses on distributing subsets of the same data across multiple computing cores and performing the same operation on each core. Task parallelism involves distributing not data, but tasks or threads across multiple computing cores. In other words, each thread is performing a unique operation. But here we have multiple scenarios: different threads may be operating on the same data, or they may be operating on different data.
 
-![1750014213025](/Linux/Core/image/Linux_thread-part-2/1750014213025.png)
+![1750014213025](/assets/images/notes/Linux_thread-part-2/1750014213025.png)
 
 Let's say we have a large data set of numbers stored in an array, and our task is to find all the prime numbers in that array. This problem requires us to iterate over the entire array, checking whether each number is prime. The key here is to understand that the result of checking whether a number is prime doesn't depend on the results for any other numbers in the array. If we want to check whether the last number in the array is prime, we don't need to wait for the earlier numbers to be checked. Each number can be processed independently.
 
 Now, if we have a four-core processor, we can split the data into four equal parts and assign each part to a different core. This is an example of data parallelism because all cores are performing the same operation on distributed subsets of the data. However, keep in mind that splitting the work across four cores doesn't necessarily mean we'll get four times the performance. For example, I tested the same example on my computer over 10 million times, and here's the average time it took to compute each subset. How much performance gain we can achieve from parallel operations is beyond the scope of this video.
 
-![1750014257228](/Linux/Core/image/Linux_thread-part-2/1750014257228.png)
+![1750014257228](/assets/images/notes/Linux_thread-part-2/1750014257228.png)
 
-![1750014281353](/Linux/Core/image/Linux_thread-part-2/1750014281353.png)
+![1750014281353](/assets/images/notes/Linux_thread-part-2/1750014281353.png)
 
 But I'd say we're given the same data set, but this time we're tasked with finding the lowest value in the array, finding the highest value, calculating the arithmetic mean of all the elements, and checking if the array contains the number 101. In this case, it doesn't make sense to split the data into subsets because each of these operations requires access to the entire data set to compute their results. But here's what we can do: assign each operation to a different core. This is an example of task parallelism—different threads working with the same data set but performing different operations. Again, using four cores doesn't mean the process will be four times faster, but it's still a significant improvement. On a single-core system, we'd have to perform these four operations one after the other. With four cores, we can execute them simultaneously, reducing the total time.
 
-![1750014365989](/Linux/Core/image/Linux_thread-part-2/1750014365989.png)
+![1750014365989](/assets/images/notes/Linux_thread-part-2/1750014365989.png)
 
 And that's about it for now. There's more content about threads coming soon.
 

@@ -44,7 +44,7 @@ Sits on top of a host operating system, which in turn talks to the hardware.
 ## Further Reading
 
 Reference material used while writing these notes (kept in the repo under
-`QNX/Resources/`):
+`assets/files/qnx/`):
 
 - *Virtualization Essentials*, Matthew Portnoy (2nd Edition)
-- ["What Is a Hypervisor and How Does It Work?"](/QNX/Resources/what-is-a-hypervisor-and-how-does-it-work-pt1.pdf)
+- ["What Is a Hypervisor and How Does It Work?"](/assets/files/qnx/what-is-a-hypervisor-and-how-does-it-work-pt1.pdf)

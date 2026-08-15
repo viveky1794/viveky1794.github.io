@@ -15,8 +15,8 @@ OS uses to decide which process gets the CPU at any given moment, based on
 criteria like response time, CPU utilization, throughput, turnaround time,
 and waiting time — all covered below.
 
-![1750700100482](/Linux/Core/image/Linux_scheduler/1750700100482.png)
-![1750700399476](/Linux/Core/image/Linux_scheduler/1750700399476.png)
+![1750700100482](/assets/images/notes/Linux_scheduler/1750700100482.png)
+![1750700399476](/assets/images/notes/Linux_scheduler/1750700399476.png)
 
 ## The Process Control Block and "Allocating the CPU"
 
@@ -27,29 +27,29 @@ pointing that register at the process's text section; reallocating it to a
 different process means updating the register to point elsewhere — a
 **context switch**.
 
-![1750700494409](/Linux/Core/image/Linux_scheduler/1750700494409.png)
-![1750700521607](/Linux/Core/image/Linux_scheduler/1750700521607.png)
-![1750700531899](/Linux/Core/image/Linux_scheduler/1750700531899.png)
-![1750700542664](/Linux/Core/image/Linux_scheduler/1750700542664.png)
-![1750700592102](/Linux/Core/image/Linux_scheduler/1750700592102.png)
-![1750700605014](/Linux/Core/image/Linux_scheduler/1750700605014.png)
+![1750700494409](/assets/images/notes/Linux_scheduler/1750700494409.png)
+![1750700521607](/assets/images/notes/Linux_scheduler/1750700521607.png)
+![1750700531899](/assets/images/notes/Linux_scheduler/1750700531899.png)
+![1750700542664](/assets/images/notes/Linux_scheduler/1750700542664.png)
+![1750700592102](/assets/images/notes/Linux_scheduler/1750700592102.png)
+![1750700605014](/assets/images/notes/Linux_scheduler/1750700605014.png)
 
 A process isn't a concrete object — it's a context the computer operates
 in. The OS represents that context with a **process control block (PCB)**:
 a struct holding the process's state, program counter, registers, and other
 management data. One is created whenever a process is created.
 
-![1750700825235](/Linux/Core/image/Linux_scheduler/1750700825235.png)
-![1750700852767](/Linux/Core/image/Linux_scheduler/1750700852767.png)
+![1750700825235](/assets/images/notes/Linux_scheduler/1750700825235.png)
+![1750700852767](/assets/images/notes/Linux_scheduler/1750700852767.png)
 
 Since a process itself can't be pushed into a queue, what actually moves
 through scheduling queues is each process's PCB — commonly just called "the
 process" for short, even though it's really a reference to it.
 
-![1750700919373](/Linux/Core/image/Linux_scheduler/1750700919373.png)
-![1750700935002](/Linux/Core/image/Linux_scheduler/1750700935002.png)
-![1750700949740](/Linux/Core/image/Linux_scheduler/1750700949740.png)
-![1750701101116](/Linux/Core/image/Linux_scheduler/1750701101116.png)
+![1750700919373](/assets/images/notes/Linux_scheduler/1750700919373.png)
+![1750700935002](/assets/images/notes/Linux_scheduler/1750700935002.png)
+![1750700949740](/assets/images/notes/Linux_scheduler/1750700949740.png)
+![1750701101116](/assets/images/notes/Linux_scheduler/1750701101116.png)
 
 ## Why "Run Until It Finishes" Doesn't Work
 
@@ -63,30 +63,30 @@ the next — breaks for two reasons:
    wall-clock doesn't hold the CPU for all 2 minutes — it spends much of
    that time waiting on something else, typically I/O.
 
-![1750701154659](/Linux/Core/image/Linux_scheduler/1750701154659.png)
-![1750701225653](/Linux/Core/image/Linux_scheduler/1750701225653.png)
-![1750701283835](/Linux/Core/image/Linux_scheduler/1750701283835.png)
-![1750701318888](/Linux/Core/image/Linux_scheduler/1750701318888.png)
+![1750701154659](/assets/images/notes/Linux_scheduler/1750701154659.png)
+![1750701225653](/assets/images/notes/Linux_scheduler/1750701225653.png)
+![1750701283835](/assets/images/notes/Linux_scheduler/1750701283835.png)
+![1750701318888](/assets/images/notes/Linux_scheduler/1750701318888.png)
 
 Take a program copying a file 8 bytes at a time.
 
-![1750783113571](/Linux/Core/image/Linux_scheduler/1750783113571.png)
-![1750783130931](/Linux/Core/image/Linux_scheduler/1750783130931.png)
+![1750783113571](/assets/images/notes/Linux_scheduler/1750783113571.png)
+![1750783130931](/assets/images/notes/Linux_scheduler/1750783130931.png)
 
 The instructions look sequential, but reads and writes are system calls that
 hand off to the disk — an I/O operation the CPU can't just push through:
 
-![1750783143732](/Linux/Core/image/Linux_scheduler/1750783143732.png)
+![1750783143732](/assets/images/notes/Linux_scheduler/1750783143732.png)
 
 Those calls can't complete until the I/O hardware finishes, independent of
 CPU speed.
 
-![1750783243450](/Linux/Core/image/Linux_scheduler/1750783243450.png)
+![1750783243450](/assets/images/notes/Linux_scheduler/1750783243450.png)
 
 So the program's CPU usage over time isn't continuous — it has gaps where
 the CPU sits idle waiting on I/O.
 
-![1750783308030](/Linux/Core/image/Linux_scheduler/1750783308030.png)
+![1750783308030](/assets/images/notes/Linux_scheduler/1750783308030.png)
 
 This is the norm, not the exception, on virtually all modern (Von Neumann)
 computers, and it's been studied for decades. The periods a process spends
@@ -95,23 +95,23 @@ I/O are **I/O bursts**. Every process execution alternates: CPU burst → I/O
 burst → CPU burst → ... → a final CPU burst that ends in a termination
 request.
 
-![1750783381978](/Linux/Core/image/Linux_scheduler/1750783381978.png)
+![1750783381978](/assets/images/notes/Linux_scheduler/1750783381978.png)
 
 Measured CPU burst durations across real systems follow a predictable
 distribution: most processes generate a large number of short CPU bursts and
 only a small number of long ones. This single observation drives most of CPU
 scheduler design — a scheduler that ignores it wastes a lot of CPU time.
 
-![1750783497381](/Linux/Core/image/Linux_scheduler/1750783497381.png)
+![1750783497381](/assets/images/notes/Linux_scheduler/1750783497381.png)
 
 The goal, then: when a process enters an I/O burst, hand the CPU to a
 *different* process, ideally one not also about to block on I/O. Note also
 that a burst never starts immediately after the previous one ends — there's
 always a small extra gap (dispatch latency, covered below).
 
-![1750783677914](/Linux/Core/image/Linux_scheduler/1750783677914.png)
-![1750783653680](/Linux/Core/image/Linux_scheduler/1750783653680.png)
-![1750784870630](/Linux/Core/image/Linux_scheduler/1750784870630.png)
+![1750783677914](/assets/images/notes/Linux_scheduler/1750783677914.png)
+![1750783653680](/assets/images/notes/Linux_scheduler/1750783653680.png)
+![1750784870630](/assets/images/notes/Linux_scheduler/1750784870630.png)
 
 A scheduling algorithm therefore has to allocate the CPU only until a
 process's *current* CPU burst ends, not until the process fully terminates —
@@ -138,7 +138,7 @@ states are universal; some systems also distinguish a process that's *fully*
 terminated from one still in the process of releasing its resources (memory,
 etc.) after an exit call.
 
-![1750788229806](/Linux/Core/image/Linux_scheduler/1750788229806.png)
+![1750788229806](/assets/images/notes/Linux_scheduler/1750788229806.png)
 
 ## Scheduler vs. Dispatcher
 
@@ -148,14 +148,14 @@ state, and only one process can run on a core at a time — so "ready to run"
 processes queue up, but "the currently running process" doesn't belong in
 any queue.
 
-![1750788266133](/Linux/Core/image/Linux_scheduler/1750788266133.png)
+![1750788266133](/assets/images/notes/Linux_scheduler/1750788266133.png)
 
 The **dispatcher** is the component that actually performs the context
 switch: when the running process blocks on I/O (or the CPU otherwise becomes
 free), the dispatcher allocates the CPU to the process at the head of the
 ready queue.
 
-![1750788382287](/Linux/Core/image/Linux_scheduler/1750788382287.png)
+![1750788382287](/assets/images/notes/Linux_scheduler/1750788382287.png)
 
 Concretely, the dispatcher: saves the CPU state of the interrupted process
 into its PCB, puts that PCB on the waiting queue, retrieves the PCB of the
@@ -163,7 +163,7 @@ next ready process, restores its saved CPU state (registers, program
 counter), and reallocates the CPU — plus switches to user mode if the
 processor supports it.
 
-![1750788428592](/Linux/Core/image/Linux_scheduler/1750788428592.png)
+![1750788428592](/assets/images/notes/Linux_scheduler/1750788428592.png)
 
 In short: the **scheduler** decides *which* process runs next by managing
 the ready queue according to some policy; the **dispatcher** *carries out*
@@ -174,8 +174,8 @@ charts (the bar-chart convention used throughout this page to show process
 schedules) since it's implicit, but it's exactly why the dispatcher is one
 of the most heavily optimized parts of an OS.
 
-![1750788805700](/Linux/Core/image/Linux_scheduler/1750788805700.png)
-![1750788784578](/Linux/Core/image/Linux_scheduler/1750788784578.png)
+![1750788805700](/assets/images/notes/Linux_scheduler/1750788805700.png)
+![1750788784578](/assets/images/notes/Linux_scheduler/1750788784578.png)
 
 ## First-Come, First-Served (FCFS)
 
@@ -186,8 +186,8 @@ CPU moves to the next one in line. Strictly, this schedules *CPU bursts*,
 not whole processes, so "first CPU burst come, first served" would be more
 precise — but "FCFS" is the name everyone uses.
 
-![1750789066799](/Linux/Core/image/Linux_scheduler/1750789066799.png)
-![1750788995367](/Linux/Core/image/Linux_scheduler/1750788995367.png)
+![1750789066799](/assets/images/notes/Linux_scheduler/1750789066799.png)
+![1750788995367](/assets/images/notes/Linux_scheduler/1750788995367.png)
 
 FCFS does account for CPU utilization, but doesn't optimize it. Processes
 with mostly short CPU bursts are **I/O-bound** (their performance improves
@@ -195,9 +195,9 @@ with faster I/O); processes with long CPU bursts are **CPU-bound** (they
 need a faster CPU, not faster I/O). Long CPU bursts are rare but never
 impossible — and that's where FCFS falls apart.
 
-![1750789448340](/Linux/Core/image/Linux_scheduler/1750789448340.png)
-![1750789541698](/Linux/Core/image/Linux_scheduler/1750789541698.png)
-![1750789553651](/Linux/Core/image/Linux_scheduler/1750789553651.png)
+![1750789448340](/assets/images/notes/Linux_scheduler/1750789448340.png)
+![1750789541698](/assets/images/notes/Linux_scheduler/1750789541698.png)
+![1750789553651](/assets/images/notes/Linux_scheduler/1750789553651.png)
 
 **The convoy effect:** with one CPU-bound process and several I/O-bound
 ones, the CPU-bound process grabs the CPU and holds it for a long stretch.
@@ -209,7 +209,7 @@ CPU-bound process returns to the ready queue and repeats the cycle. Every
 short process ends up waiting behind the one long one — lower CPU *and*
 device utilization than necessary.
 
-![1750856106052](/Linux/Core/image/Linux_scheduler/1750856106052.png)
+![1750856106052](/assets/images/notes/Linux_scheduler/1750856106052.png)
 
 ## Shortest Job First (SJF)
 
@@ -220,7 +220,7 @@ burst length, it lets short bursts overtake CPU-hungry ones, cutting the
 convoy effect — and it's provably optimal, giving the minimum possible
 average waiting time for a given set of processes.
 
-![1750856293715](/Linux/Core/image/Linux_scheduler/1750856293715.png)
+![1750856293715](/assets/images/notes/Linux_scheduler/1750856293715.png)
 
 With four processes arriving together — one needing 2 minutes, the rest
 just milliseconds — FCFS would stall the short ones behind the long one.
@@ -230,9 +230,9 @@ moving a short process ahead of a long one reduces the short process's
 waiting time by more than it increases the long process's, so average
 waiting time drops.
 
-![1750856683021](/Linux/Core/image/Linux_scheduler/1750856683021.png)
-![1750856702890](/Linux/Core/image/Linux_scheduler/1750856702890.png)
-![1750856729236](/Linux/Core/image/Linux_scheduler/1750856729236.png)
+![1750856683021](/assets/images/notes/Linux_scheduler/1750856683021.png)
+![1750856702890](/assets/images/notes/Linux_scheduler/1750856702890.png)
+![1750856729236](/assets/images/notes/Linux_scheduler/1750856729236.png)
 
 **The catch:** SJF requires knowing the length of a process's next CPU
 burst in advance, which is impossible without seeing the future — loops,
@@ -241,21 +241,21 @@ prediction unreliable. In practice, SJF *estimates* the next burst from the
 process's own history, using an exponential average of previously observed
 bursts:
 
-![1750856814307](/Linux/Core/image/Linux_scheduler/1750856814307.png)
-![1750856844037](/Linux/Core/image/Linux_scheduler/1750856844037.png)
+![1750856814307](/assets/images/notes/Linux_scheduler/1750856814307.png)
+![1750856844037](/assets/images/notes/Linux_scheduler/1750856844037.png)
 
 Each process's prediction depends only on its own burst history — burst *n*
 is the most recent observed burst, *n−1* the one before it, and so on;
 *n+1* is the burst being predicted.
 
-![1750856880060](/Linux/Core/image/Linux_scheduler/1750856880060.png)
+![1750856880060](/assets/images/notes/Linux_scheduler/1750856880060.png)
 
 The formula lets the current prediction expand recursively into all past
 predictions, which means the scheduler only needs to keep the single most
 recent estimate — not a full history of past burst lengths.
 
-![1750857057000](/Linux/Core/image/Linux_scheduler/1750857057000.png)
-![1750857089504](/Linux/Core/image/Linux_scheduler/1750857089504.png)
+![1750857057000](/assets/images/notes/Linux_scheduler/1750857057000.png)
+![1750857089504](/assets/images/notes/Linux_scheduler/1750857089504.png)
 
 The weighting factor **α** controls how much the estimate trusts recent
 history vs. the past: α = 0 ignores the latest burst entirely (prediction
@@ -266,14 +266,14 @@ term — older bursts matter less, which matches intuition. A process with no
 history yet (just created) starts from a constant default, typically a
 system-wide average.
 
-![1750857133451](/Linux/Core/image/Linux_scheduler/1750857133451.png)
-![1750857183258](/Linux/Core/image/Linux_scheduler/1750857183258.png)
-![1750857200586](/Linux/Core/image/Linux_scheduler/1750857200586.png)
-![1750857244159](/Linux/Core/image/Linux_scheduler/1750857244159.png)
-![1750857250814](/Linux/Core/image/Linux_scheduler/1750857250814.png)
-![1750857258728](/Linux/Core/image/Linux_scheduler/1750857258728.png)
-![1750857289182](/Linux/Core/image/Linux_scheduler/1750857289182.png)
-![1750857299784](/Linux/Core/image/Linux_scheduler/1750857299784.png)
+![1750857133451](/assets/images/notes/Linux_scheduler/1750857133451.png)
+![1750857183258](/assets/images/notes/Linux_scheduler/1750857183258.png)
+![1750857200586](/assets/images/notes/Linux_scheduler/1750857200586.png)
+![1750857244159](/assets/images/notes/Linux_scheduler/1750857244159.png)
+![1750857250814](/assets/images/notes/Linux_scheduler/1750857250814.png)
+![1750857258728](/assets/images/notes/Linux_scheduler/1750857258728.png)
+![1750857289182](/assets/images/notes/Linux_scheduler/1750857289182.png)
+![1750857299784](/assets/images/notes/Linux_scheduler/1750857299784.png)
 
 ## Preemption and Starvation
 
@@ -282,7 +282,7 @@ queue, should A be interrupted for B? A **preemptive** scheduler can
 interrupt a running process; a **non-preemptive** one never does — B waits
 regardless of how much shorter its burst is.
 
-![1750857724984](/Linux/Core/image/Linux_scheduler/1750857724984.png)
+![1750857724984](/assets/images/notes/Linux_scheduler/1750857724984.png)
 
 Preemption is the default in modern general-purpose systems for a concrete
 reason: in a non-preemptive system, a process with an extremely long (or
@@ -292,7 +292,7 @@ that concurrency depends on the illusion of processes progressing
 simultaneously, one badly-behaved (or malicious) process holding the CPU
 indefinitely breaks that illusion for everyone.
 
-![1750857779543](/Linux/Core/image/Linux_scheduler/1750857779543.png)
+![1750857779543](/assets/images/notes/Linux_scheduler/1750857779543.png)
 
 Any scheduling policy that leaves a process waiting indefinitely in the
 ready queue causes **starvation**. SJF is itself vulnerable to it: a process
@@ -302,8 +302,8 @@ happened to empty out, unlikely on a real system with hundreds of competing
 processes. Starvation is a property of the scheduling *policy*, not of any
 individual process.
 
-![1750860135509](/Linux/Core/image/Linux_scheduler/1750860135509.png)
-![1750860161686](/Linux/Core/image/Linux_scheduler/1750860161686.png)
+![1750860135509](/assets/images/notes/Linux_scheduler/1750860135509.png)
+![1750860161686](/assets/images/notes/Linux_scheduler/1750860161686.png)
 
 ## Round Robin
 
@@ -317,15 +317,15 @@ a context switch, with the interrupted process going to the tail of the
 queue). No process can hold the CPU indefinitely — which directly prevents
 the starvation round robin would otherwise be vulnerable to.
 
-![1750869655316](/Linux/Core/image/Linux_scheduler/1750869655316.png)
-![1750869666919](/Linux/Core/image/Linux_scheduler/1750869666919.png)
-![1750869727089](/Linux/Core/image/Linux_scheduler/1750869727089.png)
-![1750869746226](/Linux/Core/image/Linux_scheduler/1750869746226.png)
-![1750869764372](/Linux/Core/image/Linux_scheduler/1750869764372.png)
-![1750869814785](/Linux/Core/image/Linux_scheduler/1750869814785.png)
-![1750869822577](/Linux/Core/image/Linux_scheduler/1750869822577.png)
-![1750869851015](/Linux/Core/image/Linux_scheduler/1750869851015.png)
-![1750869870434](/Linux/Core/image/Linux_scheduler/1750869870434.png)
+![1750869655316](/assets/images/notes/Linux_scheduler/1750869655316.png)
+![1750869666919](/assets/images/notes/Linux_scheduler/1750869666919.png)
+![1750869727089](/assets/images/notes/Linux_scheduler/1750869727089.png)
+![1750869746226](/assets/images/notes/Linux_scheduler/1750869746226.png)
+![1750869764372](/assets/images/notes/Linux_scheduler/1750869764372.png)
+![1750869814785](/assets/images/notes/Linux_scheduler/1750869814785.png)
+![1750869822577](/assets/images/notes/Linux_scheduler/1750869822577.png)
+![1750869851015](/assets/images/notes/Linux_scheduler/1750869851015.png)
+![1750869870434](/assets/images/notes/Linux_scheduler/1750869870434.png)
 
 Preemption depends on hardware support: the timer is a physical device,
 typically embedded in the CPU itself.
@@ -338,18 +338,18 @@ roughly 1/*n* of the CPU in chunks of at most *q*, and waits at most
 time — with too large a quantum, most processes finish their burst (or hit
 I/O) before being preempted, and round robin degenerates into FCFS.
 
-![1750871016722](/Linux/Core/image/Linux_scheduler/1750871016722.png)
+![1750871016722](/assets/images/notes/Linux_scheduler/1750871016722.png)
 
 Shrinking the quantum doesn't just fix that for free, though: too small a
 quantum causes excessive context switches, and context-switch time is pure
 overhead — the system does no useful work while switching. The CPU can end
 up spending more time switching between processes than running them.
 
-![1750871364639](/Linux/Core/image/Linux_scheduler/1750871364639.png)
-![1750871375377](/Linux/Core/image/Linux_scheduler/1750871375377.png)
-![1750871700917](/Linux/Core/image/Linux_scheduler/1750871700917.png)
-![1750871714428](/Linux/Core/image/Linux_scheduler/1750871714428.png)
-![1750871739472](/Linux/Core/image/Linux_scheduler/1750871739472.png)
+![1750871364639](/assets/images/notes/Linux_scheduler/1750871364639.png)
+![1750871375377](/assets/images/notes/Linux_scheduler/1750871375377.png)
+![1750871700917](/assets/images/notes/Linux_scheduler/1750871700917.png)
+![1750871714428](/assets/images/notes/Linux_scheduler/1750871714428.png)
+![1750871739472](/assets/images/notes/Linux_scheduler/1750871739472.png)
 
 ## Scheduling Metrics
 
@@ -364,9 +364,9 @@ up spending more time switching between processes than running them.
   live or die by, since a process can be producing useful output long before
   it terminates (and some processes never terminate at all).
 
-![1750871780200](/Linux/Core/image/Linux_scheduler/1750871780200.png)
-![1750871921097](/Linux/Core/image/Linux_scheduler/1750871921097.png)
-![1750871944464](/Linux/Core/image/Linux_scheduler/1750871944464.png)
+![1750871780200](/assets/images/notes/Linux_scheduler/1750871780200.png)
+![1750871921097](/assets/images/notes/Linux_scheduler/1750871921097.png)
+![1750871944464](/assets/images/notes/Linux_scheduler/1750871944464.png)
 
 Average turnaround time doesn't simply improve as the quantum grows — it's
 generally best when most processes finish their next burst inside a single
@@ -388,13 +388,13 @@ each process an integer priority (the range and which direction — low
 number = high priority or the reverse — vary by OS) and services higher
 priority first via a priority queue.
 
-![1750872178841](/Linux/Core/image/Linux_scheduler/1750872178841.png)
-![1750872359699](/Linux/Core/image/Linux_scheduler/1750872359699.png)
-![1750872377651](/Linux/Core/image/Linux_scheduler/1750872377651.png)
-![1750872386707](/Linux/Core/image/Linux_scheduler/1750872386707.png)
-![1750872395189](/Linux/Core/image/Linux_scheduler/1750872395189.png)
-![1750872404060](/Linux/Core/image/Linux_scheduler/1750872404060.png)
-![1750872415137](/Linux/Core/image/Linux_scheduler/1750872415137.png)
+![1750872178841](/assets/images/notes/Linux_scheduler/1750872178841.png)
+![1750872359699](/assets/images/notes/Linux_scheduler/1750872359699.png)
+![1750872377651](/assets/images/notes/Linux_scheduler/1750872377651.png)
+![1750872386707](/assets/images/notes/Linux_scheduler/1750872386707.png)
+![1750872395189](/assets/images/notes/Linux_scheduler/1750872395189.png)
+![1750872404060](/assets/images/notes/Linux_scheduler/1750872404060.png)
+![1750872415137](/assets/images/notes/Linux_scheduler/1750872415137.png)
 
 It's commonly combined with round robin for fairness among same-priority
 processes. Priority scheduling inherits SJF's starvation problem (SJF is,
@@ -404,9 +404,9 @@ low-priority process indefinitely. The canonical example: an IBM 7094 at
 NASA reportedly ran from 1962 to 1973 with a low-priority job submitted in
 1967 that never got to run before shutdown.
 
-![1750872673767](/Linux/Core/image/Linux_scheduler/1750872673767.png)
-![1750872709816](/Linux/Core/image/Linux_scheduler/1750872709816.png)
-![1750872719887](/Linux/Core/image/Linux_scheduler/1750872719887.png)
+![1750872673767](/assets/images/notes/Linux_scheduler/1750872673767.png)
+![1750872709816](/assets/images/notes/Linux_scheduler/1750872709816.png)
+![1750872719887](/assets/images/notes/Linux_scheduler/1750872719887.png)
 
 **Aging** fixes this by gradually raising the priority of a process the
 longer it waits — e.g. bumping a process's priority by one every second it
@@ -427,13 +427,13 @@ scheduling algorithm — e.g. round robin for a foreground/interactive queue,
 FCFS for a background queue — matching different classes of processes to
 different responsiveness needs.
 
-![1750872792963](/Linux/Core/image/Linux_scheduler/1750872792963.png)
-![1750872804279](/Linux/Core/image/Linux_scheduler/1750872804279.png)
-![1750872816897](/Linux/Core/image/Linux_scheduler/1750872816897.png)
-![1750872845011](/Linux/Core/image/Linux_scheduler/1750872845011.png)
-![1750872853465](/Linux/Core/image/Linux_scheduler/1750872853465.png)
-![1750872879463](/Linux/Core/image/Linux_scheduler/1750872879463.png)
-![1750873195811](/Linux/Core/image/Linux_scheduler/1750873195811.png)
+![1750872792963](/assets/images/notes/Linux_scheduler/1750872792963.png)
+![1750872804279](/assets/images/notes/Linux_scheduler/1750872804279.png)
+![1750872816897](/assets/images/notes/Linux_scheduler/1750872816897.png)
+![1750872845011](/assets/images/notes/Linux_scheduler/1750872845011.png)
+![1750872853465](/assets/images/notes/Linux_scheduler/1750872853465.png)
+![1750872879463](/assets/images/notes/Linux_scheduler/1750872879463.png)
+![1750873195811](/assets/images/notes/Linux_scheduler/1750873195811.png)
 
 The gap: in plain multilevel queue scheduling, a process is permanently
 assigned to a queue on entry — low overhead, but inflexible, since a
@@ -451,23 +451,23 @@ behaving like an I/O-bound task again. Over time, short-burst processes
 settle near the top and CPU-bound ones sink — the system infers process
 behavior automatically instead of requiring it to be declared up front.
 
-![1750873264570](/Linux/Core/image/Linux_scheduler/1750873264570.png)
-![1750873279141](/Linux/Core/image/Linux_scheduler/1750873279141.png)
-![1750873286701](/Linux/Core/image/Linux_scheduler/1750873286701.png)
-![1750873330833](/Linux/Core/image/Linux_scheduler/1750873330833.png)
-![1750873338252](/Linux/Core/image/Linux_scheduler/1750873338252.png)
-![1750873351149](/Linux/Core/image/Linux_scheduler/1750873351149.png)
-![1750873369330](/Linux/Core/image/Linux_scheduler/1750873369330.png)
-![1750873381731](/Linux/Core/image/Linux_scheduler/1750873381731.png)
-![1750873406832](/Linux/Core/image/Linux_scheduler/1750873406832.png)
-![1750873508124](/Linux/Core/image/Linux_scheduler/1750873508124.png)
-![1750873543675](/Linux/Core/image/Linux_scheduler/1750873543675.png)
+![1750873264570](/assets/images/notes/Linux_scheduler/1750873264570.png)
+![1750873279141](/assets/images/notes/Linux_scheduler/1750873279141.png)
+![1750873286701](/assets/images/notes/Linux_scheduler/1750873286701.png)
+![1750873330833](/assets/images/notes/Linux_scheduler/1750873330833.png)
+![1750873338252](/assets/images/notes/Linux_scheduler/1750873338252.png)
+![1750873351149](/assets/images/notes/Linux_scheduler/1750873351149.png)
+![1750873369330](/assets/images/notes/Linux_scheduler/1750873369330.png)
+![1750873381731](/assets/images/notes/Linux_scheduler/1750873381731.png)
+![1750873406832](/assets/images/notes/Linux_scheduler/1750873406832.png)
+![1750873508124](/assets/images/notes/Linux_scheduler/1750873508124.png)
+![1750873543675](/assets/images/notes/Linux_scheduler/1750873543675.png)
 
 This is one configuration among many — the demotion/promotion criteria can
 use predicted (not just most-recent) burst length to avoid overreacting to
 one unusual burst, for example.
 
-![1750873583384](/Linux/Core/image/Linux_scheduler/1750873583384.png)
+![1750873583384](/assets/images/notes/Linux_scheduler/1750873583384.png)
 
 **Does demoting CPU-bound processes contradict giving important processes
 priority?** Not really, for two reasons: I/O-bound and interactive processes
@@ -481,10 +481,10 @@ music playback and browser interaction smooth: everyday interactive tasks
 keep top priority, and the CPU-heavy background job gets whatever cycles
 are left over.
 
-![1750873861292](/Linux/Core/image/Linux_scheduler/1750873861292.png)
-![1750873890013](/Linux/Core/image/Linux_scheduler/1750873890013.png)
-![1750873919454](/Linux/Core/image/Linux_scheduler/1750873919454.png)
-![1750874053164](/Linux/Core/image/Linux_scheduler/1750874053164.png)
+![1750873861292](/assets/images/notes/Linux_scheduler/1750873861292.png)
+![1750873890013](/assets/images/notes/Linux_scheduler/1750873890013.png)
+![1750873919454](/assets/images/notes/Linux_scheduler/1750873919454.png)
+![1750874053164](/assets/images/notes/Linux_scheduler/1750874053164.png)
 
 Multilevel feedback queue (in some variant) was the historical default
 across many general-purpose operating systems, though modern systems add
@@ -501,6 +501,6 @@ power/thermal constraints) — worth its own dedicated page down the line.
   shouldn't queue behind one waiting on disk) — that reordering is the job
   of a separate component, the **I/O scheduler**.
 
-![1750874095695](/Linux/Core/image/Linux_scheduler/1750874095695.png)
-![1750874101909](/Linux/Core/image/Linux_scheduler/1750874101909.png)
-![1750874135331](/Linux/Core/image/Linux_scheduler/1750874135331.png)
+![1750874095695](/assets/images/notes/Linux_scheduler/1750874095695.png)
+![1750874101909](/assets/images/notes/Linux_scheduler/1750874101909.png)
+![1750874135331](/assets/images/notes/Linux_scheduler/1750874135331.png)

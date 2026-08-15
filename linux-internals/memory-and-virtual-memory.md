@@ -36,11 +36,11 @@ hardware, that solves three concrete problems:
 | **Isolation** | None across processes | Each process gets its own address space |
 | **Swappable?** | No | Yes (RAM ↔ disk) |
 
-![1749364366483](/Linux/Core/image/Linux_IPC_socket/1749364366483.png)
-![1749364615901](/Linux/Core/image/Linux_IPC_socket/1749364615901.png)
-![1749364799372](/Linux/Core/image/Linux_IPC_socket/1749364799372.png)
-![1749396328022](/Linux/Core/image/Linux_IPC_socket/1749396328022.png)
-![alt text](/Linux/Core/image/image-2.png)
+![1749364366483](/assets/images/notes/Linux_IPC_socket/1749364366483.png)
+![1749364615901](/assets/images/notes/Linux_IPC_socket/1749364615901.png)
+![1749364799372](/assets/images/notes/Linux_IPC_socket/1749364799372.png)
+![1749396328022](/assets/images/notes/Linux_IPC_socket/1749396328022.png)
+![alt text](/assets/images/notes/image-2.png)
 
 ### The Three Problems, Concretely
 
@@ -52,11 +52,11 @@ crashes, since there's nowhere for that memory to physically exist. This is
 why programs could crash outright from running out of memory in early
 computing.
 
-![1751176043392](/Linux/Core/image/Linux_virtual_memory_part_1/1751176043392.png)
-![1751176189287](/Linux/Core/image/Linux_virtual_memory_part_1/1751176189287.png)
-![1751176199219](/Linux/Core/image/Linux_virtual_memory_part_1/1751176199219.png)
-![1751176229572](/Linux/Core/image/Linux_virtual_memory_part_1/1751176229572.png)
-![1751176252686](/Linux/Core/image/Linux_virtual_memory_part_1/1751176252686.png)
+![1751176043392](/assets/images/notes/Linux_virtual_memory_part_1/1751176043392.png)
+![1751176189287](/assets/images/notes/Linux_virtual_memory_part_1/1751176189287.png)
+![1751176199219](/assets/images/notes/Linux_virtual_memory_part_1/1751176199219.png)
+![1751176229572](/assets/images/notes/Linux_virtual_memory_part_1/1751176229572.png)
+![1751176252686](/assets/images/notes/Linux_virtual_memory_part_1/1751176252686.png)
 
 **Memory fragmentation:** with 4 GB of RAM and three programs — a 1 GB
 video player, a 2 GB game, and a 2 GB photo editor — running the player and
@@ -69,8 +69,8 @@ account for that manually — no straight-line indexing into an array that
 might be split across two disjoint regions — is exactly the kind of problem
 an indirection layer (virtual memory) exists to hide.
 
-![1751176344256](/Linux/Core/image/Linux_virtual_memory_part_1/1751176344256.png)
-![1751176371483](/Linux/Core/image/Linux_virtual_memory_part_1/1751176371483.png)
+![1751176344256](/assets/images/notes/Linux_virtual_memory_part_1/1751176344256.png)
+![1751176371483](/assets/images/notes/Linux_virtual_memory_part_1/1751176371483.png)
 
 **Data corruption / security:** if every program can address the same
 physical memory directly, two unrelated programs can collide. Imagine a
@@ -80,8 +80,8 @@ when the song ends, the music player zeroes that address, and the game
 reads it as zero health. Two completely unrelated programs corrupting each
 other's state, simply because they share one flat address space.
 
-![1751176423989](/Linux/Core/image/Linux_virtual_memory_part_1/1751176423989.png)
-![1751176538308](/Linux/Core/image/Linux_virtual_memory_part_1/1751176538308.png)
+![1751176423989](/assets/images/notes/Linux_virtual_memory_part_1/1751176423989.png)
+![1751176538308](/assets/images/notes/Linux_virtual_memory_part_1/1751176538308.png)
 
 All three problems trace back to the same root cause: every program sharing
 one physical address space. Give each program its own private address
@@ -97,23 +97,23 @@ addresses (RAM addresses, plus potentially the addresses of other
 memory-mapped devices — not just RAM, which is why the general term is
 "physical," not "RAM").
 
-![1751176632286](/Linux/Core/image/Linux_virtual_memory_part_1/1751176632286.png)
-![1751176643620](/Linux/Core/image/Linux_virtual_memory_part_1/1751176643620.png)
+![1751176632286](/assets/images/notes/Linux_virtual_memory_part_1/1751176632286.png)
+![1751176643620](/assets/images/notes/Linux_virtual_memory_part_1/1751176643620.png)
 
 At boot, installed RAM becomes available to the OS starting from some base
 physical address; the OS reserves part of it for itself and hands the rest
 to programs.
 
-![1751176697576](/Linux/Core/image/Linux_virtual_memory_part_1/1751176697576.png)
-![1751176717880](/Linux/Core/image/Linux_virtual_memory_part_1/1751176717880.png)
+![1751176697576](/assets/images/notes/Linux_virtual_memory_part_1/1751176697576.png)
+![1751176717880](/assets/images/notes/Linux_virtual_memory_part_1/1751176717880.png)
 
 Without virtual memory, a program's address space maps directly onto RAM.
 With it, a **map** sits in the middle: a program addressing virtual
 address 0 might actually be reading physical address 5 — any virtual
 address can map to any physical address, entirely opaque to the program.
 
-![1751176785711](/Linux/Core/image/Linux_virtual_memory_part_1/1751176785711.png)
-![1751176806834](/Linux/Core/image/Linux_virtual_memory_part_1/1751176806834.png)
+![1751176785711](/assets/images/notes/Linux_virtual_memory_part_1/1751176785711.png)
+![1751176806834](/assets/images/notes/Linux_virtual_memory_part_1/1751176806834.png)
 
 That same indirection is what makes **swap memory** possible: if a program
 needs more data than fits in RAM, the OS evicts something else (the oldest
@@ -125,10 +125,10 @@ times worse than RAM's. This is the direct reason more RAM measurably
 speeds up a machine that's swapping heavily — less swapping, fewer page
 faults.
 
-![1751176921966](/Linux/Core/image/Linux_virtual_memory_part_1/1751176921966.png)
-![1751176944259](/Linux/Core/image/Linux_virtual_memory_part_1/1751176944259.png)
-![1751176960792](/Linux/Core/image/Linux_virtual_memory_part_1/1751176960792.png)
-![1751177031137](/Linux/Core/image/Linux_virtual_memory_part_1/1751177031137.png)
+![1751176921966](/assets/images/notes/Linux_virtual_memory_part_1/1751176921966.png)
+![1751176944259](/assets/images/notes/Linux_virtual_memory_part_1/1751176944259.png)
+![1751176960792](/assets/images/notes/Linux_virtual_memory_part_1/1751176960792.png)
+![1751177031137](/assets/images/notes/Linux_virtual_memory_part_1/1751177031137.png)
 
 The same indirection fixes fragmentation directly: the earlier example (a
 game running, then trying to also run a photo editor in two disjoint 1 GB
@@ -136,7 +136,7 @@ free chunks) can now map the editor's *contiguous* virtual address range
 onto those two disjoint physical chunks — the program still sees one
 continuous space and never knows the difference.
 
-![1751177198134](/Linux/Core/image/Linux_virtual_memory_part_1/1751177198134.png)
+![1751177198134](/assets/images/notes/Linux_virtual_memory_part_1/1751177198134.png)
 
 And it fixes the security problem the same way: the video game and the
 music player each get their own map. Both may write to virtual address 64,
@@ -148,8 +148,8 @@ programs *can* have parts of their address spaces mapped to the *same*
 physical memory — how a shared library (libc, a UI toolkit) or a shared
 memory segment for fast IPC actually works.
 
-![1751178498235](/Linux/Core/image/Linux_virtual_memory_part_1/1751178498235.png)
-![1751178516236](/Linux/Core/image/Linux_virtual_memory_part_1/1751178516236.png)
+![1751178498235](/assets/images/notes/Linux_virtual_memory_part_1/1751178498235.png)
+![1751178516236](/assets/images/notes/Linux_virtual_memory_part_1/1751178516236.png)
 
 ## Page Tables
 
@@ -165,11 +165,11 @@ own, which is part of why real page tables are multi-level (a tree of
 smaller tables, not one giant flat array) rather than the simplified flat
 model used for intuition here.
 
-![alt text](/Linux/Core/image/image-4.png)
-![1749313255324](/Linux/Core/image/Linux_IPC_socket/1749313255324.png)
-![1749313539369](/Linux/Core/image/Linux_IPC_socket/1749313539369.png)
-![1749313508331](/Linux/Core/image/Linux_IPC_socket/1749313508331.png)
-![1749313470308](/Linux/Core/image/Linux_IPC_socket/1749313470308.png)
+![alt text](/assets/images/notes/image-4.png)
+![1749313255324](/assets/images/notes/Linux_IPC_socket/1749313255324.png)
+![1749313539369](/assets/images/notes/Linux_IPC_socket/1749313539369.png)
+![1749313508331](/assets/images/notes/Linux_IPC_socket/1749313508331.png)
+![1749313470308](/assets/images/notes/Linux_IPC_socket/1749313470308.png)
 
 ### Why Pages, Not Individual Words
 
@@ -179,9 +179,9 @@ its own. With a 32-bit address space, that's 2³⁰ words needing an entry
 each; at 4 bytes per entry, that's a 4 GB page table — *per program*. Not
 remotely workable.
 
-![1751178606438](/Linux/Core/image/Linux_virtual_memory_part_1/1751178606438.png)
-![1751178660901](/Linux/Core/image/Linux_virtual_memory_part_1/1751178660901.png)
-![1751179029309](/Linux/Core/image/Linux_virtual_memory_part_1/1751179029309.png)
+![1751178606438](/assets/images/notes/Linux_virtual_memory_part_1/1751178606438.png)
+![1751178660901](/assets/images/notes/Linux_virtual_memory_part_1/1751178660901.png)
+![1751179029309](/assets/images/notes/Linux_virtual_memory_part_1/1751179029309.png)
 
 The fix is exactly the page/frame chunking already introduced above:
 instead of one entry per word, one entry covers an entire 4 KB chunk (1,024
@@ -193,7 +193,7 @@ time instead of a single word — which works well in practice, since nearby
 memory tends to get accessed together anyway (the same locality of
 reference caching relies on).
 
-![1751179277432](/Linux/Core/image/Linux_virtual_memory_part_1/1751179277432.png)
+![1751179277432](/assets/images/notes/Linux_virtual_memory_part_1/1751179277432.png)
 
 Mapping a page means mapping a *range*: virtual page 1 (addresses
 4,096–8,191) might map to physical page 2 (addresses 8,192–12,287). Any
@@ -201,7 +201,7 @@ address inside that virtual page keeps the *same offset* from the page
 start in the physical page — virtual address 4,200 is 104 bytes into
 virtual page 1, so it lands at physical address 8,192 + 104 = **8,296**.
 
-![1751179492583](/Linux/Core/image/Linux_virtual_memory_part_1/1751179492583.png)
+![1751179492583](/assets/images/notes/Linux_virtual_memory_part_1/1751179492583.png)
 
 ### Multi-Level Page Tables
 
@@ -211,7 +211,7 @@ and a real desktop running hundreds of background programs (595, in one
 concrete case) could need 2+ GB of RAM purely for page tables, most of it
 for programs barely using any memory themselves.
 
-![1751183111653](/Linux/Core/image/Linux_virtual_memory_part_1/1751183111653.png)
+![1751183111653](/assets/images/notes/Linux_virtual_memory_part_1/1751183111653.png)
 
 The obvious fix — swap unused page tables to disk like any other memory —
 runs into a chicken-and-egg problem: the CPU needs the page table *to find*
@@ -227,9 +227,9 @@ levels — Linux uses **five-level page tables** specifically to address
 today's 64 TB-class server RAM configurations, at the cost of more memory
 accesses per translation as levels increase.
 
-![1751183268354](/Linux/Core/image/Linux_virtual_memory_part_1/1751183268354.png)
-![1751183389584](/Linux/Core/image/Linux_virtual_memory_part_1/1751183389584.png)
-![1751183441643](/Linux/Core/image/Linux_virtual_memory_part_1/1751183441643.png)
+![1751183268354](/assets/images/notes/Linux_virtual_memory_part_1/1751183268354.png)
+![1751183389584](/assets/images/notes/Linux_virtual_memory_part_1/1751183389584.png)
+![1751183441643](/assets/images/notes/Linux_virtual_memory_part_1/1751183441643.png)
 
 **Two-level translation, worked through:** with a 32-bit virtual address, a
 30-bit physical address (1 GB RAM), and 4 KB pages, the low 12 bits are
@@ -244,7 +244,7 @@ touches a small fraction of its full virtual address space: the
 second-level tables for the parts it never touches simply never need to be
 resident.
 
-![1751183612068](/Linux/Core/image/Linux_virtual_memory_part_1/1751183612068.png)
+![1751183612068](/assets/images/notes/Linux_virtual_memory_part_1/1751183612068.png)
 
 ## Address Translation: Page Number & Offset
 
@@ -255,12 +255,12 @@ than one memory access per instruction. This is what makes a hardware
 between the CPU and memory, translates every virtual address to a physical
 one, and enforces that a process can't reach memory it doesn't own.
 
-![1749313809394](/Linux/Core/image/Linux_IPC_socket/1749313809394.png)
-![alt text](/Linux/Core/image/image-3.png)
-![1749314138274](/Linux/Core/image/Linux_IPC_socket/1749314138274.png)
-![1749314415297](/Linux/Core/image/Linux_IPC_socket/1749314415297.png)
-![1749314473340](/Linux/Core/image/Linux_IPC_socket/1749314473340.png)
-![1749314498915](/Linux/Core/image/Linux_IPC_socket/1749314498915.png)
+![1749313809394](/assets/images/notes/Linux_IPC_socket/1749313809394.png)
+![alt text](/assets/images/notes/image-3.png)
+![1749314138274](/assets/images/notes/Linux_IPC_socket/1749314138274.png)
+![1749314415297](/assets/images/notes/Linux_IPC_socket/1749314415297.png)
+![1749314473340](/assets/images/notes/Linux_IPC_socket/1749314473340.png)
+![1749314498915](/assets/images/notes/Linux_IPC_socket/1749314498915.png)
 
 Every virtual address splits into two fields:
 
@@ -268,8 +268,8 @@ Every virtual address splits into two fields:
 - **Page offset** — the byte position within that page (never translated —
   it's copied straight into the physical address).
 
-![1749314898684](/Linux/Core/image/Linux_IPC_socket/1749314898684.png)
-![1749315026718](/Linux/Core/image/Linux_IPC_socket/1749315026718.png)
+![1749314898684](/assets/images/notes/Linux_IPC_socket/1749314898684.png)
+![1749315026718](/assets/images/notes/Linux_IPC_socket/1749315026718.png)
 
 **Worked example** (32-bit virtual address space = 4 GB, 256 MB physical
 RAM, 4 KB pages):
@@ -299,23 +299,23 @@ virtual page number `12345` in the page table to get back physical page
 number `0432`, then concatenates `0432` + `678` for the full physical
 address.
 
-![1751180066944](/Linux/Core/image/Linux_virtual_memory_part_1/1751180066944.png)
-![1751180073245](/Linux/Core/image/Linux_virtual_memory_part_1/1751180073245.png)
-![1751180086897](/Linux/Core/image/Linux_virtual_memory_part_1/1751180086897.png)
-![1751180094248](/Linux/Core/image/Linux_virtual_memory_part_1/1751180094248.png)
-![1751180114311](/Linux/Core/image/Linux_virtual_memory_part_1/1751180114311.png)
-![1751180350662](/Linux/Core/image/Linux_virtual_memory_part_1/1751180350662.png)
-![1751180387352](/Linux/Core/image/Linux_virtual_memory_part_1/1751180387352.png)
+![1751180066944](/assets/images/notes/Linux_virtual_memory_part_1/1751180066944.png)
+![1751180073245](/assets/images/notes/Linux_virtual_memory_part_1/1751180073245.png)
+![1751180086897](/assets/images/notes/Linux_virtual_memory_part_1/1751180086897.png)
+![1751180094248](/assets/images/notes/Linux_virtual_memory_part_1/1751180094248.png)
+![1751180114311](/assets/images/notes/Linux_virtual_memory_part_1/1751180114311.png)
+![1751180350662](/assets/images/notes/Linux_virtual_memory_part_1/1751180350662.png)
+![1751180387352](/assets/images/notes/Linux_virtual_memory_part_1/1751180387352.png)
 
-![1751774777472](/Linux/Core/image/Linux_virtual_memory_part_2/1751774777472.png)
-![1751774831799](/Linux/Core/image/Linux_virtual_memory_part_2/1751774831799.png)
-![1751775003331](/Linux/Core/image/Linux_virtual_memory_part_2/1751775003331.png)
-![1751775189973](/Linux/Core/image/Linux_virtual_memory_part_2/1751775189973.png)
-![1751776721465](/Linux/Core/image/Linux_virtual_memory_part_3/1751776721465.png)
-![1751776748375](/Linux/Core/image/Linux_virtual_memory_part_3/1751776748375.png)
-![1751776810616](/Linux/Core/image/Linux_virtual_memory_part_3/1751776810616.png)
-![1751776876854](/Linux/Core/image/Linux_virtual_memory_part_3/1751776876854.png)
-![1751776994048](/Linux/Core/image/Linux_virtual_memory_part_3/1751776994048.png)
+![1751774777472](/assets/images/notes/Linux_virtual_memory_part_2/1751774777472.png)
+![1751774831799](/assets/images/notes/Linux_virtual_memory_part_2/1751774831799.png)
+![1751775003331](/assets/images/notes/Linux_virtual_memory_part_2/1751775003331.png)
+![1751775189973](/assets/images/notes/Linux_virtual_memory_part_2/1751775189973.png)
+![1751776721465](/assets/images/notes/Linux_virtual_memory_part_3/1751776721465.png)
+![1751776748375](/assets/images/notes/Linux_virtual_memory_part_3/1751776748375.png)
+![1751776810616](/assets/images/notes/Linux_virtual_memory_part_3/1751776810616.png)
+![1751776876854](/assets/images/notes/Linux_virtual_memory_part_3/1751776876854.png)
+![1751776994048](/assets/images/notes/Linux_virtual_memory_part_3/1751776994048.png)
 
 **Page size is a trade-off.** Moving from 4 KB to 64 KB pages means the
 offset grows to 16 bits (2¹⁶ = 64 KB) and the VPN shrinks accordingly —
@@ -337,10 +337,10 @@ Without ASID, every context switch would force a full TLB flush and
 repopulation for the incoming process — defeating much of the point of
 having a TLB at all.
 
-![1751181313323](/Linux/Core/image/Linux_virtual_memory_part_1/1751181313323.png)
-![1751181574628](/Linux/Core/image/Linux_virtual_memory_part_1/1751181574628.png)
-![1751181584096](/Linux/Core/image/Linux_virtual_memory_part_1/1751181584096.png)
-![1751181622356](/Linux/Core/image/Linux_virtual_memory_part_1/1751181622356.png)
+![1751181313323](/assets/images/notes/Linux_virtual_memory_part_1/1751181313323.png)
+![1751181574628](/assets/images/notes/Linux_virtual_memory_part_1/1751181574628.png)
+![1751181584096](/assets/images/notes/Linux_virtual_memory_part_1/1751181584096.png)
+![1751181622356](/assets/images/notes/Linux_virtual_memory_part_1/1751181622356.png)
 
 Modern architectures keep TLBs small — often only a few thousand entries —
 which is exactly why they're constantly being refilled; this only works
@@ -350,12 +350,12 @@ responsible for translation and for raising page faults is the **MMU**
 (Memory Management Unit) itself — the TLB is its fast-path cache, sitting
 on the CPU package and programmed by the OS.
 
-![1751183050431](/Linux/Core/image/Linux_virtual_memory_part_1/1751183050431.png)
-![1751183058967](/Linux/Core/image/Linux_virtual_memory_part_1/1751183058967.png)
+![1751183050431](/assets/images/notes/Linux_virtual_memory_part_1/1751183050431.png)
+![1751183058967](/assets/images/notes/Linux_virtual_memory_part_1/1751183058967.png)
 
-![1749314558327](/Linux/Core/image/Linux_IPC_socket/1749314558327.png)
-![1749315091979](/Linux/Core/image/Linux_IPC_socket/1749315091979.png)
-![1749315174668](/Linux/Core/image/Linux_IPC_socket/1749315174668.png)
+![1749314558327](/assets/images/notes/Linux_IPC_socket/1749314558327.png)
+![1749315091979](/assets/images/notes/Linux_IPC_socket/1749315091979.png)
+![1749315174668](/assets/images/notes/Linux_IPC_socket/1749315174668.png)
 
 **Typical TLB characteristics:**
 
@@ -374,11 +374,11 @@ on the CPU package and programmed by the OS.
 - **Page is on disk** — a full **page fault** (~80 million cycles — see
   below), since the OS has to swap the page in before anything can proceed.
 
-![1749315405863](/Linux/Core/image/Linux_IPC_socket/1749315405863.png)
-![1749315454726](/Linux/Core/image/Linux_IPC_socket/1749315454726.png)
-![1749315545014](/Linux/Core/image/Linux_IPC_socket/1749315545014.png)
-![1749315629724](/Linux/Core/image/Linux_IPC_socket/1749315629724.png)
-![1749315732924](/Linux/Core/image/Linux_IPC_socket/1749315732924.png)
+![1749315405863](/assets/images/notes/Linux_IPC_socket/1749315405863.png)
+![1749315454726](/assets/images/notes/Linux_IPC_socket/1749315454726.png)
+![1749315545014](/assets/images/notes/Linux_IPC_socket/1749315545014.png)
+![1749315629724](/assets/images/notes/Linux_IPC_socket/1749315629724.png)
+![1749315732924](/assets/images/notes/Linux_IPC_socket/1749315732924.png)
 
 **Improving TLB coverage and performance:**
 
@@ -394,8 +394,8 @@ on the CPU package and programmed by the OS.
    and add a DMA-like path specifically for pulling translations from RAM
    into the TLB without looping back through the OS at all.
 
-![1751181630871](/Linux/Core/image/Linux_virtual_memory_part_1/1751181630871.png)
-![1751182894971](/Linux/Core/image/Linux_virtual_memory_part_1/1751182894971.png)
+![1751181630871](/assets/images/notes/Linux_virtual_memory_part_1/1751181630871.png)
+![1751182894971](/assets/images/notes/Linux_virtual_memory_part_1/1751182894971.png)
 
 **Worked example:** translating virtual address `12345678` again, but now
 through the TLB — the offset (`678`) is copied straight through as always;
@@ -407,8 +407,8 @@ number hits directly in the TLB. On a full TLB, the least-recently-used
 entry is evicted to make room — and if the target page turns out to be on
 disk rather than RAM, the result is a full page fault, exactly as above.
 
-![1751182974723](/Linux/Core/image/Linux_virtual_memory_part_1/1751182974723.png)
-![1751182986876](/Linux/Core/image/Linux_virtual_memory_part_1/1751182986876.png)
+![1751182974723](/assets/images/notes/Linux_virtual_memory_part_1/1751182974723.png)
+![1751182986876](/assets/images/notes/Linux_virtual_memory_part_1/1751182986876.png)
 
 **Memory access flow, simplified:**
 
@@ -442,12 +442,12 @@ slow, loading the missing page back in is a good candidate for
 disk to RAM frees the CPU to run a different process in the meantime,
 instead of stalling on the transfer.
 
-![1751180496770](/Linux/Core/image/Linux_virtual_memory_part_1/1751180496770.png)
-![1751180574865](/Linux/Core/image/Linux_virtual_memory_part_1/1751180574865.png)
-![1751180717922](/Linux/Core/image/Linux_virtual_memory_part_1/1751180717922.png)
-![1751180729651](/Linux/Core/image/Linux_virtual_memory_part_1/1751180729651.png)
-![1751180737772](/Linux/Core/image/Linux_virtual_memory_part_1/1751180737772.png)
-![1751180987788](/Linux/Core/image/Linux_virtual_memory_part_1/1751180987788.png)
+![1751180496770](/assets/images/notes/Linux_virtual_memory_part_1/1751180496770.png)
+![1751180574865](/assets/images/notes/Linux_virtual_memory_part_1/1751180574865.png)
+![1751180717922](/assets/images/notes/Linux_virtual_memory_part_1/1751180717922.png)
+![1751180729651](/assets/images/notes/Linux_virtual_memory_part_1/1751180729651.png)
+![1751180737772](/assets/images/notes/Linux_virtual_memory_part_1/1751180737772.png)
+![1751180987788](/assets/images/notes/Linux_virtual_memory_part_1/1751180987788.png)
 
 **Three kinds of page fault:**
 
@@ -457,8 +457,8 @@ instead of stalling on the transfer.
 | **Major (hard)** | The data genuinely isn't in RAM and must be read from disk — typical of demand paging (a page loaded only when first touched) or a page previously swapped out to reclaim RAM. | Slow — can meaningfully degrade performance if frequent. |
 | **Invalid** | The accessed address isn't mapped in the process's address space at all, on disk or in RAM. | Fatal — the kernel sends `SIGSEGV` (segmentation fault). |
 
-![1749355062259](/Linux/Core/image/Linux_IPC_socket/1749355062259.png)
-![1749355098190](/Linux/Core/image/Linux_IPC_socket/1749355098190.png)
+![1749355062259](/assets/images/notes/Linux_IPC_socket/1749355062259.png)
+![1749355098190](/assets/images/notes/Linux_IPC_socket/1749355098190.png)
 
 **Handling a major fault, step by step:**
 
@@ -502,10 +502,10 @@ disk I/O and reduces how often real paging is needed. In general: enough
 RAM means paging rarely triggers at all, and adding RAM is a direct,
 reliable performance fix for a system that's paging heavily.
 
-![1751778734506](/Linux/Core/image/Linux_virtual_memory_part_4/1751778734506.png)
-![1751778879980](/Linux/Core/image/Linux_virtual_memory_part_4/1751778879980.png)
-![1751784202234](/Linux/Core/image/Linux_virtual_memory_part_4/1751784202234.png)
-![1751784393355](/Linux/Core/image/Linux_virtual_memory_part_4/1751784393355.png)
+![1751778734506](/assets/images/notes/Linux_virtual_memory_part_4/1751778734506.png)
+![1751778879980](/assets/images/notes/Linux_virtual_memory_part_4/1751778879980.png)
+![1751784202234](/assets/images/notes/Linux_virtual_memory_part_4/1751784202234.png)
+![1751784393355](/assets/images/notes/Linux_virtual_memory_part_4/1751784393355.png)
 
 ### Inspecting Page Faults & Memory Maps in Practice
 
@@ -727,8 +727,8 @@ switch, so the *same* virtual address in two different processes routinely
 points at entirely different physical memory unless they're explicitly
 sharing that page.
 
-![1751800942365](/Linux/Core/image/Linux_virtual_memory_part_5/1751800942365.png)
-![1751801136512](/Linux/Core/image/Linux_virtual_memory_part_5/1751801136512.png)
-![1751801296347](/Linux/Core/image/Linux_virtual_memory_part_5/1751801296347.png)
-![1751801377522](/Linux/Core/image/Linux_virtual_memory_part_5/1751801377522.png)
-![1751801450013](/Linux/Core/image/Linux_virtual_memory_part_5/1751801450013.png)
+![1751800942365](/assets/images/notes/Linux_virtual_memory_part_5/1751800942365.png)
+![1751801136512](/assets/images/notes/Linux_virtual_memory_part_5/1751801136512.png)
+![1751801296347](/assets/images/notes/Linux_virtual_memory_part_5/1751801296347.png)
+![1751801377522](/assets/images/notes/Linux_virtual_memory_part_5/1751801377522.png)
+![1751801450013](/assets/images/notes/Linux_virtual_memory_part_5/1751801450013.png)

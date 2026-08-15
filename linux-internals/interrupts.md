@@ -137,7 +137,7 @@ in the tree only for historical compatibility.)
 The number of softirqs is fixed at compile time — `NR_SOFTIRQS = 11` as of
 kernel 6.15, stored in `struct softirq_action softirq_vec[NR_SOFTIRQS]`.
 
-![1753247343375](/Linux/Core/image/Linux_interrupt/1753247343375.png)
+![1753247343375](/assets/images/notes/Linux_interrupt/1753247343375.png)
 
 A registered softirq has to be explicitly marked pending before it runs —
 **raising** it. Typically an interrupt handler raises its softirq right
@@ -164,7 +164,7 @@ tasklets are represented by one of two softirqs, `HI_SOFTIRQ` and
 `TASKLET_SOFTIRQ`; the only difference is that `HI_SOFTIRQ`-based tasklets
 run before `TASKLET_SOFTIRQ`-based ones.
 
-![1753255235879](/Linux/Core/image/Linux_interrupt/1753255235879.png)
+![1753255235879](/assets/images/notes/Linux_interrupt/1753255235879.png)
 
 Each `tasklet_struct` uses a C union so only one of its callback fields is
 active at a time:
