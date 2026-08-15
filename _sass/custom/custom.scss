@@ -1,12 +1,17 @@
 // Custom styles layered on top of Just the Docs.
-// Typography, the landing-page hero/project cards, and small accessibility
-// polish (focus rings, motion, touch targets). Kept independent of the
-// theme's internal class names where possible so it degrades gracefully.
+//
+// IMPORTANT: this file must never reference the theme's own Sass
+// variables (e.g. $link-color, $border-color) directly. Using an
+// undefined Sass variable is a hard compile error, not a harmless
+// no-op -- and whether those names are in scope here depends on
+// exactly how the theme's own stylesheet imports this file, which
+// isn't something to assume. Every color below is either a literal
+// value or one of this file's own CSS custom properties instead.
 
 :root {
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  --accent: #{$link-color};
+  --accent: #2563eb;
   --radius: 10px;
 }
 
@@ -66,6 +71,11 @@ input:focus-visible {
 // Deliberately NOT a full-viewport breakout: this stays inside the
 // theme's normal content column so it can't misalign against the fixed
 // sidebar on desktop. Still a strong panel -- just a contained one.
+//
+// .skill-group / .project-card / .tag only ever appear inside
+// .scope-page (they're index.md-only classes), so all of their styling
+// -- including layout, not just color -- lives under the .scope-page
+// prefix below rather than as unscoped base rules.
 
 .scope-page {
   --scope-bg: #0a0e0d;
@@ -85,13 +95,14 @@ input:focus-visible {
   font-family: var(--font-body);
   margin: -2rem -1rem 0;
   padding: 2.5rem 1rem 4rem;
+}
 
-  a {
-    color: var(--scope-cyan);
-  }
-  a:hover {
-    color: var(--scope-amber);
-  }
+.scope-page a {
+  color: var(--scope-cyan);
+}
+
+.scope-page a:hover {
+  color: var(--scope-amber);
 }
 
 @media (min-width: 60rem) {
@@ -277,7 +288,7 @@ input:focus-visible {
   flex: none;
 }
 
-// ---- Skills -----------------------------------------------------------
+// ---- Skills -------------------------------------------------------------
 
 .skills-grid {
   display: grid;
@@ -286,46 +297,34 @@ input:focus-visible {
   margin: 1.5rem 0 2.5rem;
 }
 
-.skill-group {
+.scope-page .skill-group {
   padding: 1rem 1.15rem;
-  border: 1px solid $border-color;
-  border-radius: var(--radius);
-  background-color: $table-background-color;
+  border-radius: 3px;
+  background: var(--scope-panel);
+  border: 1px solid var(--scope-grid-major);
+  border-left: 3px solid var(--scope-amber);
 }
 
-.skill-group strong {
+.scope-page .skill-group strong {
   display: block;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--accent);
   margin-bottom: 0.4rem;
-}
-
-.skill-group p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: $body-text-color;
-}
-
-.scope-page .skill-group {
-  background: var(--scope-panel);
-  border: 1px solid var(--scope-grid-major);
-  border-left: 3px solid var(--scope-amber);
-  border-radius: 3px;
-}
-
-.scope-page .skill-group strong {
   font-family: var(--font-mono);
   color: var(--scope-cyan);
 }
 
 .scope-page .skill-group p {
+  margin: 0;
+  font-size: 0.95rem;
   color: var(--scope-body);
 }
 
-// ---- Project / Notes cards --------------------------------------------
+// ---- Project / Notes cards ----------------------------------------------
+// Corner ticks echo the registration marks on the Latent Lattice logo
+// specimen sheet -- same visual language, doing structural work here.
 
 .project-grid {
   display: grid;
@@ -334,73 +333,12 @@ input:focus-visible {
   margin: 1.5rem 0 2.5rem;
 }
 
-.project-card {
-  padding: 1.5rem;
-  border: 1px solid $border-color;
-  border-radius: var(--radius);
-  background-color: $table-background-color;
-}
-
-.project-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  transform: translateY(-2px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .project-card:hover {
-    transform: none;
-  }
-  a, .btn, .project-card, .tag {
-    transition: none;
-  }
-}
-
-.project-card h3,
-.project-card h3 a {
-  margin-top: 0;
-  font-size: 1.15rem;
-}
-
-.project-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: $grey-dk-000;
-  margin-top: -0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.tag-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 1rem;
-}
-
-.tag {
-  display: inline-block;
-  padding: 0.25rem 0.65rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  border-radius: 999px;
-  background-color: rgba($link-color, 0.1);
-  color: var(--accent);
-  border: 1px solid rgba($link-color, 0.25);
-}
-
-// ---- Scoped card theme (projects use amber, notes use cyan) -----------
-// Corner ticks echo the registration marks on the Latent Lattice
-// specimen sheet -- same visual language, now doing structural work.
-
 .scope-page .project-card {
   position: relative;
+  padding: 1.5rem;
+  border-radius: 3px;
   background: var(--scope-panel);
   border: 1px solid var(--scope-grid-major);
-  border-radius: 3px;
 }
 
 .scope-page .project-card::before,
@@ -429,10 +367,13 @@ input:focus-visible {
 .scope-page .project-card:hover {
   border-color: var(--scope-amber);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  transform: translateY(-2px);
 }
 
 .scope-page .project-card h3,
 .scope-page .project-card h3 a {
+  margin-top: 0;
+  font-size: 1.15rem;
   font-family: var(--font-body);
   font-weight: 600;
   color: var(--scope-ink);
@@ -443,13 +384,33 @@ input:focus-visible {
 }
 
 .scope-page .project-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: -0.5rem;
+  margin-bottom: 0.75rem;
   color: var(--scope-muted);
 }
 
-.scope-page .project-card .tag {
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.scope-page .tag {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 999px;
   background: rgba(255, 178, 56, 0.12);
   color: var(--scope-amber);
-  border-color: rgba(255, 178, 56, 0.3);
+  border: 1px solid rgba(255, 178, 56, 0.3);
 }
 
 .scope-page .notes-card::before,
@@ -465,5 +426,8 @@ input:focus-visible {
   .btn-scope:hover,
   .scope-page .project-card:hover {
     transform: none;
+  }
+  a, .btn, .project-card, .tag {
+    transition: none;
   }
 }
