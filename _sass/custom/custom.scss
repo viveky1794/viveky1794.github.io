@@ -180,10 +180,19 @@ input:focus-visible {
   margin-bottom: 0.4rem;
 }
 
-.skill-group p {
+.skill-group ul {
   margin: 0;
+  padding-left: 1.1rem;
   font-size: 0.95rem;
   color: $body-text-color;
+}
+
+.skill-group li {
+  margin-bottom: 0.3rem;
+}
+
+.skill-group li:last-child {
+  margin-bottom: 0;
 }
 
 // ---- Project / Notes cards --------------------------------------------

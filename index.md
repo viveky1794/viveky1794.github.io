@@ -43,27 +43,55 @@ and Cortex-A silicon.
 
 <div class="skill-group" markdown="1">
 **Languages**
-C · C++ · Python
+
+- C
+- C++
+- Python
 </div>
 
 <div class="skill-group" markdown="1">
 **Platforms**
-ARM Cortex-M · ARM Cortex-A · ESP8266/ESP32 · STM32F1/F4 · 8051 · BeagleBone Black · Raspberry Pi
+
+- ARM Cortex-M
+- ARM Cortex-A
+- ESP8266 / ESP32
+- STM32F1 / F4
+- 8051
+- BeagleBone Black
+- Raspberry Pi
 </div>
 
 <div class="skill-group" markdown="1">
 **Focus Areas**
-Linux device drivers · Bare-metal firmware · BSP development · Power management (PMIC, CPUIdle, runtime PM) · Cache coherency · Memory management
+
+- Linux device drivers
+- Bare-metal firmware
+- BSP development
+- Power management (PMIC, CPUIdle, runtime PM)
+- Cache coherency
+- Memory management
 </div>
 
 <div class="skill-group" markdown="1">
 **Protocols**
-I2C · USART · SPI · USB (host & device)
+
+- I2C
+- USART
+- SPI
+- USB (host & device)
 </div>
 
 <div class="skill-group" markdown="1">
 **Tools**
-Git/Gerrit · JTAG (Trace32) · GDB · Buildroot · U-Boot · Yocto · STM32Cube · PyQt5
+
+- Git/Gerrit
+- JTAG (Trace32)
+- GDB
+- Buildroot
+- U-Boot
+- Yocto
+- STM32Cube
+- PyQt5
 </div>
 
 </div>
