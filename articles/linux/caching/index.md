@@ -25,7 +25,7 @@ those entities are stored as separate objects scattered across memory
 unrelated memory location for every single entity — expensive when repeated
 dozens of times per frame.
 
-![1749402637256](/assets/images/notes/Linux_IPC_socket/1749402637256.png)
+![1749402637256](/articles/linux/caching/images/1749402637256.png)
 
 Modern engines address this with *data-oriented design*: instead of each
 entity owning a scattered blob of properties, all positions are stored
@@ -34,7 +34,7 @@ layout lets the CPU iterate over one tightly-packed array instead of chasing
 pointers all over memory — and it's exactly the access pattern a CPU cache is
 built to exploit.
 
-![1749402751221](/assets/images/notes/Linux_IPC_socket/1749402751221.png)
+![1749402751221](/articles/linux/caching/images/1749402751221.png)
 
 The CPU cache is a small, very fast memory that sits between the core and
 main memory, holding copies of the data the CPU is likely to need next. The
@@ -42,14 +42,14 @@ CPU reads and writes to the cache directly, and only pushes changes back to
 main memory later if needed — avoiding a slow round trip to RAM on every
 access.
 
-![1749402800318](/assets/images/notes/Linux_IPC_socket/1749402800318.png)
+![1749402800318](/articles/linux/caching/images/1749402800318.png)
 
 Modern CPUs have multiple cache levels — L1, L2, L3 — of increasing size and
 decreasing speed, all located inside or very close to the CPU package. The
 rest of this page mostly talks about "the cache" as a single concept before
 covering the multi-level hierarchy in detail further down.
 
-![1749402813592](/assets/images/notes/Linux_IPC_socket/1749402813592.png)
+![1749402813592](/articles/linux/caching/images/1749402813592.png)
 
 ## Cache Hits and Misses
 
@@ -64,36 +64,36 @@ address in that run is requested, it's already sitting in the cache — a
 **cache hit** — and the CPU can read it directly, skipping the slow trip to
 main memory entirely.
 
-![1749403702750](/assets/images/notes/Linux_IPC_socket/1749403702750.png)
-![1749403758268](/assets/images/notes/Linux_IPC_socket/1749403758268.png)
+![1749403702750](/articles/linux/caching/images/1749403702750.png)
+![1749403758268](/articles/linux/caching/images/1749403758268.png)
 
 Storing data contiguously in memory increases the hit rate and cuts down the
 time the CPU spends stalled on main memory. This behavior is governed by the
 **locality of reference** principle, which has two parts: temporal locality
 and spatial locality.
 
-![1749403775107](/assets/images/notes/Linux_IPC_socket/1749403775107.png)
+![1749403775107](/articles/linux/caching/images/1749403775107.png)
 
 **Temporal locality** — recently accessed data is likely to be accessed
 again soon. If a character's position is updated every frame, that address
 gets read repeatedly in a short window, so keeping it in the cache avoids
 reloading it from main memory each time.
 
-![1749403862113](/assets/images/notes/Linux_IPC_socket/1749403862113.png)
-![1749403882385](/assets/images/notes/Linux_IPC_socket/1749403882385.png)
+![1749403862113](/articles/linux/caching/images/1749403862113.png)
+![1749403882385](/articles/linux/caching/images/1749403882385.png)
 
 **Spatial locality** — data physically close to an accessed address tends to
 be accessed shortly after. Updating one character's position is usually
 followed by updating the positions of adjacent characters stored right next
 to it.
 
-![1749403910288](/assets/images/notes/Linux_IPC_socket/1749403910288.png)
+![1749403910288](/articles/linux/caching/images/1749403910288.png)
 
 Organizing data contiguously means that loading one piece of data into the
 cache also loads its neighbors — fewer cache misses, more efficient memory
 access.
 
-![1749489259343](/assets/images/notes/Linux_IPC_socket/1749489259343.png)
+![1749489259343](/articles/linux/caching/images/1749489259343.png)
 
 ## Cache Structure: Lines, Sets & Ways
 
@@ -111,7 +111,7 @@ associative.
 - **Way** — a single line within a set; the number of ways is the cache's
   associativity (e.g. a 4-way set associative cache has 4 lines per set).
 
-![1749489579418](/assets/images/notes/Linux_IPC_socket/1749489579418.png)
+![1749489579418](/articles/linux/caching/images/1749489579418.png)
 
 ### Worked Example
 
@@ -147,8 +147,8 @@ uses the offset to pull the exact byte out of the matching line.
 
 [Set Associative Mapping — video walkthrough](https://youtu.be/KhAh6thw_TI?si=Div0hHtchUx9gIOz)
 
-![1749489833836](/assets/images/notes/Linux_IPC_socket/1749489833836.png)
-![1749490284917](/assets/images/notes/Linux_IPC_socket/1749490284917.png)
+![1749489833836](/articles/linux/caching/images/1749489833836.png)
+![1749490284917](/articles/linux/caching/images/1749490284917.png)
 
 ### Associativity Trade-offs
 
@@ -162,8 +162,8 @@ which line within that set it lands on. The two extremes:
   the one designated line is already occupied, it must be evicted to make
   room, even if other lines sit empty.
 
-![1749490496617](/assets/images/notes/Linux_IPC_socket/1749490496617.png)
-![1749490563783](/assets/images/notes/Linux_IPC_socket/1749490563783.png)
+![1749490496617](/articles/linux/caching/images/1749490496617.png)
+![1749490563783](/articles/linux/caching/images/1749490563783.png)
 
 Most real caches sit between these two extremes as N-way set associative
 caches. Because the cache is small relative to main memory, it fills up
@@ -171,7 +171,7 @@ quickly and has to evict something to make room for new data — decided by a
 **cache replacement algorithm** (LRU and its approximations are the most
 common; a deeper look at replacement policies is a topic on its own).
 
-![1749490608390](/assets/images/notes/Linux_IPC_socket/1749490608390.png)
+![1749490608390](/articles/linux/caching/images/1749490608390.png)
 
 ## Cache Coherence & Write Policies
 
@@ -182,22 +182,22 @@ holds the old value at that address — the **cache coherence problem**. If
 another component reads that address directly from memory, it gets stale
 data.
 
-![1749732588843](/assets/images/notes/Linux_Cache_part-2/1749732588843.png)
-![1749732622020](/assets/images/notes/Linux_Cache_part-2/1749732622020.png)
-![1749732652897](/assets/images/notes/Linux_Cache_part-2/1749732652897.png)
-![1749732663422](/assets/images/notes/Linux_Cache_part-2/1749732663422.png)
+![1749732588843](/articles/linux/caching/images/1749732588843.png)
+![1749732622020](/articles/linux/caching/images/1749732622020.png)
+![1749732652897](/articles/linux/caching/images/1749732652897.png)
+![1749732663422](/articles/linux/caching/images/1749732663422.png)
 
 This gets more serious in multicore/multiprocessor systems, where every core
 has its own cache but all of them share the same main memory: if one core
 modifies its cached copy without telling the others, the rest keep reading
 stale data from memory or from their own caches.
 
-![1749732719512](/assets/images/notes/Linux_Cache_part-2/1749732719512.png)
+![1749732719512](/articles/linux/caching/images/1749732719512.png)
 
 Write policies cover two independent decisions: what happens on a **write
 hit**, and what happens on a **write miss**.
 
-![1749732837591](/assets/images/notes/Linux_Cache_part-2/1749732837591.png)
+![1749732837591](/articles/linux/caching/images/1749732837591.png)
 
 ### Write Hits: Write-Through vs. Write-Back
 
@@ -210,8 +210,8 @@ main memory too, keeping the two always in sync. This simplifies tracking
 modified data, but every write now pays for two updates instead of one,
 slowing writes down and adding traffic to the memory bus.
 
-![1749732982758](/assets/images/notes/Linux_Cache_part-2/1749732982758.png)
-![1749733307885](/assets/images/notes/Linux_Cache_part-2/1749733307885.png)
+![1749732982758](/articles/linux/caching/images/1749732982758.png)
+![1749733307885](/articles/linux/caching/images/1749733307885.png)
 
 **Write-back** — a write updates only the cache; main memory is updated
 later, typically on eviction or an explicit flush. Multiple writes to the
@@ -220,9 +220,9 @@ uses less bus bandwidth — at the cost of more complex bookkeeping, and a
 real risk of data loss if power is lost before a modified line is written
 back.
 
-![1749732966549](/assets/images/notes/Linux_Cache_part-2/1749732966549.png)
-![1749733334804](/assets/images/notes/Linux_Cache_part-2/1749733334804.png)
-![1749733364686](/assets/images/notes/Linux_Cache_part-2/1749733364686.png)
+![1749732966549](/articles/linux/caching/images/1749732966549.png)
+![1749733334804](/articles/linux/caching/images/1749733334804.png)
+![1749733364686](/articles/linux/caching/images/1749733364686.png)
 
 Write-back caches track this with a **dirty bit** per cache line: set to 1
 whenever the line is modified, meaning the cache copy no longer matches main
@@ -231,7 +231,7 @@ line is discarded immediately (cache and memory already agree); if it's 1,
 the modified data is written back to main memory first. A cache flush walks
 every line, writes back anything with the dirty bit set, then clears it.
 
-![1749733400507](/assets/images/notes/Linux_Cache_part-2/1749733400507.png)
+![1749733400507](/articles/linux/caching/images/1749733400507.png)
 
 ### Write Misses: Write-Allocate vs. No-Write-Allocate
 
@@ -246,7 +246,7 @@ that gets reused, but wasteful (and a source of *cache pollution*, where
 rarely-used data displaces useful data) if the address is written once and
 never touched again.
 
-![1749734541053](/assets/images/notes/Linux_Cache_part-2/1749734541053.png)
+![1749734541053](/articles/linux/caching/images/1749734541053.png)
 
 **No-write-allocate** — the write bypasses the cache entirely and goes
 straight to main memory. This avoids the overhead of loading data into the
@@ -263,7 +263,7 @@ again soon.
 | **Write-allocate** | — | Load line into cache → update → write back later |
 | **No-write-allocate** | — | Write directly to RAM, bypassing the cache |
 
-![1749734600824](/assets/images/notes/Linux_Cache_part-2/1749734600824.png)
+![1749734600824](/articles/linux/caching/images/1749734600824.png)
 
 In practice, **write-back + write-allocate** is the common pairing for CPU
 L1 data caches, since both policies maximize cache utilization and minimize
@@ -273,7 +273,7 @@ written once and rarely read again — no benefit to caching it, and this
 combination avoids polluting the cache with it. Other combinations exist for
 other trade-offs, but these two are the common ones.
 
-![1749737652003](/assets/images/notes/Linux_Cache_part-2/1749737652003.png)
+![1749737652003](/articles/linux/caching/images/1749737652003.png)
 
 ## Multi-Level Cache Hierarchies
 
@@ -281,9 +281,9 @@ Modern CPUs use a hierarchy of caches: the level closest to the core is the
 smallest and fastest, and each level further out is larger, slower, and more
 complex.
 
-![1749882390239](/assets/images/notes/Linux_Cache_Hierarchy/1749882390239.png)
-![1749882654008](/assets/images/notes/Linux_Cache_Hierarchy/1749882654008.png)
-![1749882681542](/assets/images/notes/Linux_Cache_Hierarchy/1749882681542.png)
+![1749882390239](/articles/linux/caching/images/1749882390239.png)
+![1749882654008](/articles/linux/caching/images/1749882654008.png)
+![1749882681542](/articles/linux/caching/images/1749882681542.png)
 
 **L1** is kept very small to match the speed of the core, and is typically
 split into separate instruction and data caches. When L1's small size
@@ -291,14 +291,14 @@ becomes a bottleneck, **L2** — larger, slower, usually unified for both data
 and instructions, and dedicated to a single core — sits behind it and talks
 directly to L1.
 
-![1749882930532](/assets/images/notes/Linux_Cache_Hierarchy/1749882930532.png)
+![1749882930532](/articles/linux/caching/images/1749882930532.png)
 
 On multi-core systems, an **L3** cache is typically shared across all cores:
 larger and slower than L2, it lets cores share data without going all the
 way to main memory, and is checked when both L1 and L2 miss. Some
 specialized systems add an L4 on top of L1–L3 for even more headroom.
 
-![1749883099931](/assets/images/notes/Linux_Cache_Hierarchy/1749883099931.png)
+![1749883099931](/articles/linux/caching/images/1749883099931.png)
 
 Typical numbers per level:
 
@@ -308,33 +308,33 @@ Typical numbers per level:
 | **L2** | 256 KB – 2 MB (up to several MB on older CPUs) | 4–16 ways | 4–10 cycles |
 | **L3** | 2 MB – 32+ MB (shared) | ~16 ways (varies) | 10–40 cycles |
 
-![1749883138769](/assets/images/notes/Linux_Cache_Hierarchy/1749883138769.png)
-![1749883180739](/assets/images/notes/Linux_Cache_Hierarchy/1749883180739.png)
-![1749883220610](/assets/images/notes/Linux_Cache_Hierarchy/1749883220610.png)
+![1749883138769](/articles/linux/caching/images/1749883138769.png)
+![1749883180739](/articles/linux/caching/images/1749883180739.png)
+![1749883220610](/articles/linux/caching/images/1749883220610.png)
 
 ### Inclusion Policies
 
 Inclusion policies decide whether a data block can live in just one cache
 level, be copied across multiple levels, or something more flexible:
 
-![1749883272767](/assets/images/notes/Linux_Cache_Hierarchy/1749883272767.png)
+![1749883272767](/articles/linux/caching/images/1749883272767.png)
 
 - **Inclusive** — data in a higher level (e.g. L1) is also duplicated in the
   levels below it (L2, and possibly L3). L2 is said to *include* L1.
-  ![1749883305707](/assets/images/notes/Linux_Cache_Hierarchy/1749883305707.png)
+  ![1749883305707](/articles/linux/caching/images/1749883305707.png)
 - **Exclusive** — a block exists in exactly one cache level at a time. If
   it's in L1, it's not in L2 or L3. L2 is *exclusive* of L1.
-  ![1749883376282](/assets/images/notes/Linux_Cache_Hierarchy/1749883376282.png)
+  ![1749883376282](/articles/linux/caching/images/1749883376282.png)
 - **Non-inclusive, non-exclusive** — a hybrid with no strict duplication
   rule; a block may or may not appear in multiple levels depending on system
   design.
-  ![1749883401054](/assets/images/notes/Linux_Cache_Hierarchy/1749883401054.png)
+  ![1749883401054](/articles/linux/caching/images/1749883401054.png)
 
 Real CPUs mix policies across levels — for example, Intel's Sandy Bridge,
 Ivy Bridge, and Skylake pair an inclusive L3 with a non-inclusive,
 non-exclusive L2.
 
-![1749883438464](/assets/images/notes/Linux_Cache_Hierarchy/1749883438464.png)
+![1749883438464](/articles/linux/caching/images/1749883438464.png)
 
 ### Reads and Writes Through the Hierarchy
 
@@ -345,23 +345,23 @@ in L1). Miss again, and check L3 the same way, copying down through L2 into
 L1 on a hit. If all three miss, the data comes from main memory and is
 copied into L3, L2, and L1 on its way to the core.
 
-![1749883557741](/assets/images/notes/Linux_Cache_Hierarchy/1749883557741.png)
-![1749883577145](/assets/images/notes/Linux_Cache_Hierarchy/1749883577145.png)
-![1749883586432](/assets/images/notes/Linux_Cache_Hierarchy/1749883586432.png)
-![1749883616860](/assets/images/notes/Linux_Cache_Hierarchy/1749883616860.png)
+![1749883557741](/articles/linux/caching/images/1749883557741.png)
+![1749883577145](/articles/linux/caching/images/1749883577145.png)
+![1749883586432](/articles/linux/caching/images/1749883586432.png)
+![1749883616860](/articles/linux/caching/images/1749883616860.png)
 
 **Write** behavior (assuming all levels share the same policy for
 simplicity): under write-through, a write to L1 immediately propagates to
 L2, L3, and main memory, keeping every level in sync.
 
-![1749883745091](/assets/images/notes/Linux_Cache_Hierarchy/1749883745091.png)
+![1749883745091](/articles/linux/caching/images/1749883745091.png)
 
 Under write-back, only L1 is updated immediately and marked dirty; lower
 levels are updated on eviction. When a dirty L1 line is evicted, it's
 written to L2 (marked dirty there too), and so on down the hierarchy.
 
-![1749883771978](/assets/images/notes/Linux_Cache_Hierarchy/1749883771978.png)
-![1749883790182](/assets/images/notes/Linux_Cache_Hierarchy/1749883790182.png)
+![1749883771978](/articles/linux/caching/images/1749883771978.png)
+![1749883790182](/articles/linux/caching/images/1749883790182.png)
 
 Write misses follow the same allocate / no-allocate split as a single-level
 cache, applied at whichever level takes the miss: write-allocate brings the
@@ -369,8 +369,8 @@ block into the hierarchy and updates it there; no-write-allocate bypasses
 the cache and writes straight to the next level down — all the way to main
 memory if every level is configured no-write-allocate.
 
-![1749883905283](/assets/images/notes/Linux_Cache_Hierarchy/1749883905283.png)
-![1749883925965](/assets/images/notes/Linux_Cache_Hierarchy/1749883925965.png)
+![1749883905283](/articles/linux/caching/images/1749883905283.png)
+![1749883925965](/articles/linux/caching/images/1749883925965.png)
 
 ## Summary
 

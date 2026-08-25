@@ -15,10 +15,18 @@ articles/
   index.md                  <- "Articles" nav section parent
   linux/
     index.md                <- "Linux Internals" section page
-    *.md                     <- one topic per file (Caching, DMA, ...)
+    caching/
+      index.md               <- one article
+      images/                <- images used only by this article
+    dma/
+      index.md
+      images/
+    ...                      <- one folder per article, same pattern
   qnx/
     index.md                <- "QNX" section page
-    *.md                     <- QNX topics, as they're written
+    docs/                    <- PDFs/epub referenced from articles/qnx/
+  zephyr/
+    index.md                <- "Zephyr" section page
 
 web_backend/
   _includes/, _sass/         <- theme overrides (rarely touched)
@@ -26,11 +34,7 @@ web_backend/
 
 assets/
   images/
-    logo.png, favicon.png, vivek.jpg   <- site branding
-    notes/                              <- every image used inside a note,
-                                            one subfolder per topic
-  files/
-    qnx/                    <- PDFs/epub linked from articles/qnx/
+    logo.png, favicon.png, vivek.jpg   <- site branding (not article content)
 
 _config.yml, Gemfile        <- must stay at repo root (Jekyll/GitHub Pages
                                 requirement)
@@ -38,6 +42,10 @@ sources/                    <- raw working files (excalidraw, docx), not part
                                 of the site
 zephyr-project/             <- empty for now
 ```
+
+Each article's images and reference files live in its own folder, right
+next to its `index.md` — not in a shared top-level `assets/` folder. See
+[`CONTRIBUTING.md`](CONTRIBUTING.md) for why.
 
 **To add a new article, or a whole new section** (e.g. Zephyr): see
 [`CONTRIBUTING.md`](CONTRIBUTING.md) — it covers the front-matter contract

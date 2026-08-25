@@ -23,7 +23,7 @@ custom USB Host/HID stack built on STM32F407 in [Projects](/#projects).
 
 ### USB data flow through Linux Kernel Layers till user space
 
-![usb_protocol_driver_layers](/assets/images/notes/usb-protocol/usb_protocol_driver_layers.png)
+![usb_protocol_driver_layers](/articles/linux/usb-protocol/images/usb_protocol_driver_layers.png)
 
 ### Responsibilities of USB Drivers (Layers wise)
 
