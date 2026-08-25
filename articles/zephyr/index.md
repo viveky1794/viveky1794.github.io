@@ -1,14 +1,16 @@
 ---
 layout: default
-title: Articles
-nav_order: 2
+title: Zephyr
+parent: Articles
 has_children: true
-permalink: /articles/
-description: "Notes on Linux and embedded-systems internals -- QNX, Linux kernel internals, ARM Cortex-M/A, memory management, caching, scheduling, and USB."
+nav_order: 3
+permalink: /articles/zephyr/
+description: "Zephyr related code"
+redirect_from:
+  - /zephyr/
+  - /zephyr.html
 ---
 
-# Articles
+# Zephyr
 
-A working knowledge base of Linux and embedded-systems internals, written
-as I dig into each topic — not a tutorial series, more a set of references
-I keep coming back to. Pick a section in the sidebar.
+Zephyr is real time operating system
