@@ -2,8 +2,12 @@
 layout: default
 title: Caching
 parent: Linux Internals
+grand_parent: Articles
 nav_order: 3
 description: "How CPU caches actually work: locality of reference, cache lines/sets/ways, write policies, dirty bits, and multi-level cache hierarchies."
+redirect_from:
+  - /linux-internals/caching/
+  - /linux-internals/caching.html
 ---
 
 # Caching

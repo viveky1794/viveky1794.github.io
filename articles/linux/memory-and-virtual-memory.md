@@ -2,8 +2,12 @@
 layout: default
 title: Memory & Virtual Memory
 parent: Linux Internals
+grand_parent: Articles
 nav_order: 2
 description: "Virtual memory end to end: why it exists, page tables, address translation, the TLB, page faults, swapping/thrashing, and memory protection."
+redirect_from:
+  - /linux-internals/memory-and-virtual-memory/
+  - /linux-internals/memory-and-virtual-memory.html
 ---
 
 # Memory & Virtual Memory
@@ -345,7 +349,7 @@ having a TLB at all.
 Modern architectures keep TLBs small — often only a few thousand entries —
 which is exactly why they're constantly being refilled; this only works
 well in practice because of locality of reference (see
-[Caching](/linux-internals/caching)). The piece of hardware actually
+[Caching](/articles/linux/caching)). The piece of hardware actually
 responsible for translation and for raising page faults is the **MMU**
 (Memory Management Unit) itself — the TLB is its fast-path cache, sitting
 on the CPU package and programmed by the OS.
@@ -438,7 +442,7 @@ loaded), it has to be flushed to disk first; if it's clean, it can just be
 dropped, since disk already holds an up-to-date copy — a small but real
 performance win for pages that were only ever read. Because disk I/O is so
 slow, loading the missing page back in is a good candidate for
-[DMA](/linux-internals/dma): letting a DMA controller move the data from
+[DMA](/articles/linux/dma): letting a DMA controller move the data from
 disk to RAM frees the CPU to run a different process in the meantime,
 instead of stalling on the transfer.
 

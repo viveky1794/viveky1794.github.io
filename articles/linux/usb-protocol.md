@@ -1,8 +1,13 @@
 ---
 layout: default
 title: USB Protocol
-nav_order: 4
+parent: Linux Internals
+grand_parent: Articles
+nav_order: 8
 description: "USB from the Linux driver stack down to the wire: kernel layers, packet types, pipes, device states, and descriptors."
+redirect_from:
+  - /linux-internals/usb-protocol/
+  - /linux-internals/usb-protocol.html
 ---
 
 # USB Protocol

@@ -2,8 +2,12 @@
 layout: default
 title: DMA
 parent: Linux Internals
+grand_parent: Articles
 nav_order: 7
 description: "Direct Memory Access: why it exists, transfer modes, IOMMU, and how an ARM-style DMA controller (PL330) executes its own instruction stream."
+redirect_from:
+  - /linux-internals/dma/
+  - /linux-internals/dma.html
 ---
 
 # Direct Memory Access (DMA)

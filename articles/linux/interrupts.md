@@ -2,8 +2,12 @@
 layout: default
 title: Interrupts
 parent: Linux Internals
+grand_parent: Articles
 nav_order: 6
 description: "Interrupts and exceptions from the ground up: top half vs. bottom half, the BH/softirq/tasklet/workqueue evolution, ksoftirqd, and a worked GPIO softirq driver."
+redirect_from:
+  - /linux-internals/interrupts/
+  - /linux-internals/interrupts.html
 ---
 
 # Interrupts

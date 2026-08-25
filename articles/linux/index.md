@@ -1,9 +1,14 @@
 ---
 layout: default
 title: Linux Internals
-nav_order: 2
+parent: Articles
 has_children: true
+nav_order: 1
+permalink: /articles/linux/
 description: "Notes on Linux and computer-systems internals: computer architecture, memory management, caching, scheduling, interrupts, and more."
+redirect_from:
+  - /linux-internals/
+  - /linux-internals.html
 ---
 
 # Linux Internals

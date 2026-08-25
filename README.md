@@ -8,10 +8,21 @@ management, caching, scheduling, interrupts, USB, and QNX/virtualization).
 ## Repo structure
 
 ```
-index.md                    <- homepage (bio, projects, skills)
-linux-internals.md          <- "Linux Internals" nav section parent
-linux-internals/*.md        <- one topic per file (Caching, DMA, ...)
-qnx.md                      <- "QNX" section (single page for now)
+user_profile/
+  index.md                  <- homepage (bio, projects, skills), permalink: /
+
+articles/
+  index.md                  <- "Articles" nav section parent
+  linux/
+    index.md                <- "Linux Internals" section page
+    *.md                     <- one topic per file (Caching, DMA, ...)
+  qnx/
+    index.md                <- "QNX" section page
+    *.md                     <- QNX topics, as they're written
+
+web_backend/
+  _includes/, _sass/         <- theme overrides (rarely touched)
+  design/                    <- logo design deliverables, not part of the site
 
 assets/
   images/
@@ -19,28 +30,18 @@ assets/
     notes/                              <- every image used inside a note,
                                             one subfolder per topic
   files/
-    qnx/                    <- PDFs/epub linked from qnx.md
+    qnx/                    <- PDFs/epub linked from articles/qnx/
 
-_config.yml, _includes/, _sass/    <- theme config/overrides (rarely touched)
-design/                     <- logo design deliverables, not part of the site
+_config.yml, Gemfile        <- must stay at repo root (Jekyll/GitHub Pages
+                                requirement)
 sources/                    <- raw working files (excalidraw, docx), not part
-                                of the site either
-zephyr-project/             <- empty for now, see below
+                                of the site
+zephyr-project/             <- empty for now
 ```
 
-**To add a new note to an existing section** (e.g. another Linux Internals
-topic): create `linux-internals/your-topic.md` with front matter matching
-the other files there (`layout: default`, `title`, `parent: Linux
-Internals`, `nav_order`, `description`), and drop any images it needs in a
-new `assets/images/notes/your-topic/` folder, referenced as
-`/assets/images/notes/your-topic/file.png`.
-
-**To add a whole new top-level section** (e.g. Zephyr, once there's
-content): follow the QNX pattern — a single `zephyr.md` at the repo root is
-enough to start (it doesn't need its own folder until it grows past one
-page, at which point copy the `linux-internals.md` + `linux-internals/`
-pattern). Give it `nav_order` after the existing sections in
-`_config.yml`-adjacent front matter.
+**To add a new article, or a whole new section** (e.g. Zephyr): see
+[`CONTRIBUTING.md`](CONTRIBUTING.md) — it covers the front-matter contract
+that controls sidebar placement, plus a copy-paste template.
 
 ## Stack
 

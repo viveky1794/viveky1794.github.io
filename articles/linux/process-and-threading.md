@@ -2,8 +2,12 @@
 layout: default
 title: Process & Threading
 parent: Linux Internals
+grand_parent: Articles
 nav_order: 4
 description: "Processes, the PCB, context switching, threads, and how threads behave on single-core vs multi-core systems."
+redirect_from:
+  - /linux-internals/process-and-threading/
+  - /linux-internals/process-and-threading.html
 ---
 
 # Process & Threading
