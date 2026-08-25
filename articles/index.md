@@ -3,6 +3,7 @@ layout: default
 title: Articles
 nav_order: 2
 has_children: true
+has_toc: false
 permalink: /articles/
 description: "Notes on Linux and embedded-systems internals -- QNX, Linux kernel internals, ARM Cortex-M/A, memory management, caching, scheduling, and USB."
 ---

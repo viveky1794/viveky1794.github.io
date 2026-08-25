@@ -3,6 +3,7 @@ layout: default
 title: Linux Internals
 parent: Articles
 has_children: true
+has_toc: false
 nav_order: 1
 permalink: /articles/linux/
 description: "Notes on Linux and computer-systems internals: computer architecture, memory management, caching, scheduling, interrupts, and more."

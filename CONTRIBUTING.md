@@ -45,6 +45,12 @@ correctly.
    ```
 2. Add topic files inside `articles/<section>/` following the steps above,
    with `parent: <Section Name>` and `grand_parent: Articles`.
+3. Add `has_toc: false` to the new section's `index.md`. Without it, Just
+   the Docs auto-renders a second "Table of contents" list of children
+   inside the page body — redundant with the sidebar, which already shows
+   the same tree. Every existing section index (`articles/index.md`,
+   `articles/linux/index.md`, `articles/qnx/index.md`,
+   `articles/zephyr/index.md`) already sets this.
 
 ## Editing the homepage / profile content
 

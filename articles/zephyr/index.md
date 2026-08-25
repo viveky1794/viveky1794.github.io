@@ -3,6 +3,7 @@ layout: default
 title: Zephyr
 parent: Articles
 has_children: true
+has_toc: false
 nav_order: 3
 permalink: /articles/zephyr/
 description: "Zephyr related code"
