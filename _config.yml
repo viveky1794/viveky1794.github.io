@@ -12,11 +12,19 @@ logo: "/assets/images/logo.png"
 
 remote_theme: just-the-docs/just-the-docs
 
+# Site code (Sass overrides, include overrides, logo design sources) lives
+# under web_backend/ instead of the Jekyll-conventional root locations, so
+# content folders (articles/, user_profile/) stay uncluttered at the root.
+includes_dir: web_backend/_includes
+sass:
+  sass_dir: web_backend/_sass
+
 plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-feed
+  - jekyll-redirect-from
 
 # --- Just the Docs settings ---
 search_enabled: true
@@ -66,16 +74,19 @@ google_analytics: G-XXXXXXXXXX
 twitter:
   card: summary
 
-# README.md is the GitHub-facing repo readme, not a site page. design/ and
-# sources/ are repo-only artifacts (logo design deliverables, raw
-# excalidraw/docx working files) -- not meant to be served as site pages.
+# README.md and CONTRIBUTING.md are GitHub-facing repo docs, not site pages.
+# web_backend/design/ and sources/ are repo-only artifacts (logo design
+# deliverables, raw excalidraw/docx working files) -- not meant to be served
+# as site pages. articles/_TEMPLATE.md is a starter file, not real content.
 exclude:
   - README.md
+  - CONTRIBUTING.md
   - Gemfile
   - Gemfile.lock
   - LICENSE
   - zephyr-project/
-  - design/
+  - web_backend/design/
   - sources/
   - vendor/
   - node_modules/
+  - articles/_TEMPLATE.md

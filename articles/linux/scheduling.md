@@ -2,8 +2,12 @@
 layout: default
 title: Scheduling
 parent: Linux Internals
+grand_parent: Articles
 nav_order: 5
 description: "CPU scheduling from first principles: PCBs, the scheduler vs. the dispatcher, CPU/IO bursts, FCFS, SJF, round robin, priority scheduling, aging, and multilevel feedback queues."
+redirect_from:
+  - /linux-internals/scheduling/
+  - /linux-internals/scheduling.html
 ---
 
 # CPU Scheduling

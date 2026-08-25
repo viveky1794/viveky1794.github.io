@@ -27,7 +27,7 @@ and Cortex-A silicon.
 {: .fs-5 }
 
 [Connect on LinkedIn](https://www.linkedin.com/in/viveky1794){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank" rel="noopener" }
-[Browse the Notes](/linux-internals){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Browse the Notes](/articles/linux/){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 </div>
 
@@ -113,7 +113,7 @@ data over USART and forwarding it across USB to drive generic USB printers.
 Extended into a full USB HID implementation supporting three device
 classes — barcode scanner, receipt printer, and a custom keyboard — for a
 point-of-sale hardware integration. Background reading:
-[USB Protocol](/linux-internals/usb-protocol).
+[USB Protocol](/articles/linux/usb-protocol).
 
 <div class="tag-row">
 <span class="tag">C</span><span class="tag">STM32 HAL</span><span class="tag">USB Host</span><span class="tag">HID</span>
@@ -167,7 +167,7 @@ I keep coming back to.
 
 <div class="project-card" markdown="1">
 
-### [Linux Internals](/linux-internals)
+### [Linux Internals](/articles/linux/)
 
 Computer architecture, memory & virtual memory, caching, process/threading,
 scheduling, interrupts, DMA, USB, and kernel boot.
@@ -176,7 +176,7 @@ scheduling, interrupts, DMA, USB, and kernel boot.
 
 <div class="project-card" markdown="1">
 
-### [QNX](/qnx)
+### [QNX](/articles/qnx/)
 
 Virtualization and hypervisor fundamentals, growing alongside my current
 platform work.

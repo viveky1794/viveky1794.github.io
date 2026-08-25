@@ -2,8 +2,12 @@
 layout: default
 title: Misc & Kernel Boot
 parent: Linux Internals
+grand_parent: Articles
 nav_order: 9
 description: "Grab-bag of Linux internals notes: kernel boot sequence, ELF loading, module dependency resolution, deadlocks, and fork/exec/clone."
+redirect_from:
+  - /linux-internals/misc-and-boot/
+  - /linux-internals/misc-and-boot.html
 ---
 
 # Misc & Kernel Boot
@@ -445,9 +449,9 @@ site are linked.
   application code?
 - What is a memory map? Describe one from a system you know well.
 - What problem arises when DMA operates on cacheable memory, and how do
-  you solve it? (See [DMA](/linux-internals/dma).)
+  you solve it? (See [DMA](/articles/linux/dma).)
 - Page tables and how they're handled.
-- L1/L2 cache in Linux. (See [Caching](/linux-internals/caching).)
+- L1/L2 cache in Linux. (See [Caching](/articles/linux/caching).)
 - Describe the memory hierarchy (asked in nearly every ops interview).
 - Basic SMP architecture — be able to diagram it.
 - How is memory addressed?
@@ -468,9 +472,9 @@ site are linked.
 - The `fork`/`exec`/`clone` family and how each relates to process memory.
   (See [fork, exec & clone](#difference-between-fork-exec-and-clone).)
 - POSIX shared memory: `mmap`, `shm_open`, `fstat`, and similar.
-- What is DMA, and how does it work? (See [DMA](/linux-internals/dma).)
+- What is DMA, and how does it work? (See [DMA](/articles/linux/dma).)
 - What is a cache vs. a buffer — compare and contrast, with examples of
-  where you'd encounter each. (See [Caching](/linux-internals/caching).)
+  where you'd encounter each. (See [Caching](/articles/linux/caching).)
 
 **Memory management — practical questions:**
 
@@ -499,7 +503,7 @@ site are linked.
 - DMA vs. RDMA — where would you expect to find each?
 - Compare LRU, LFU, MFU, FIFO, and similar page-replacement algorithms.
 - How do Type-1 hypervisors affect a guest's memory subsystem, and where
-  does that become visible? (See [QNX](/qnx).)
+  does that become visible? (See [QNX](/articles/qnx).)
 
 ## What Is an OS?
 

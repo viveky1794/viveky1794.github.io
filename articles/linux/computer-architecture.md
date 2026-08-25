@@ -2,8 +2,12 @@
 layout: default
 title: Computer Architecture
 parent: Linux Internals
+grand_parent: Articles
 nav_order: 1
 description: "From transistors to a working CPU: logic gates, adders, latches, registers, RAM, and the fetch-decode-execute cycle."
+redirect_from:
+  - /linux-internals/computer-architecture/
+  - /linux-internals/computer-architecture.html
 ---
 
 # Computer Architecture

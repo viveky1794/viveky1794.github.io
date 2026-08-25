@@ -1,8 +1,14 @@
 ---
 layout: default
 title: QNX
-nav_order: 3
+parent: Articles
+has_children: true
+nav_order: 2
+permalink: /articles/qnx/
 description: "Virtualization fundamentals -- VMs, hypervisors, Type-1 vs Type-2 -- as background for QNX platform and hypervisor work."
+redirect_from:
+  - /qnx/
+  - /qnx.html
 ---
 
 # QNX
