@@ -10,6 +10,7 @@ management, caching, scheduling, interrupts, USB, and QNX/virtualization).
 ```
 user_profile/
   index.md                  <- homepage (bio, projects, skills), permalink: /
+  images/                    <- photos used only on the homepage
 
 articles/
   index.md                  <- "Articles" nav section parent
@@ -34,7 +35,7 @@ web_backend/
 
 assets/
   images/
-    logo.png, favicon.png, vivek.jpg   <- site branding (not article content)
+    logo.png, favicon.png   <- site branding, used sitewide (not page content)
 
 _config.yml, Gemfile        <- must stay at repo root (Jekyll/GitHub Pages
                                 requirement)

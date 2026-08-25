@@ -31,7 +31,7 @@ and Cortex-A silicon.
 
 </div>
 
-<img src="/assets/images/vivek.jpg" alt="Photo of Vivek Yadav" class="hero-photo">
+<img src="/user_profile/images/self_pic-2.jpeg" alt="Photo of Vivek Yadav" class="hero-photo">
 
 </div>
 
