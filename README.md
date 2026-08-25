@@ -10,7 +10,8 @@ management, caching, scheduling, interrupts, USB, and QNX/virtualization).
 ```
 user_profile/
   index.md                  <- homepage (bio, projects, skills), permalink: /
-  images/                    <- photos used only on the homepage
+  images/                    <- homepage photo, plus logo.png/favicon.png
+                                (used sitewide -- see note below)
 
 articles/
   index.md                  <- "Articles" nav section parent
@@ -33,10 +34,6 @@ web_backend/
   _includes/, _sass/         <- theme overrides (rarely touched)
   design/                    <- logo design deliverables, not part of the site
 
-assets/
-  images/
-    logo.png, favicon.png   <- site branding, used sitewide (not page content)
-
 _config.yml, Gemfile        <- must stay at repo root (Jekyll/GitHub Pages
                                 requirement)
 sources/                    <- raw working files (excalidraw, docx), not part
@@ -45,8 +42,12 @@ zephyr-project/             <- empty for now
 ```
 
 Each article's images and reference files live in its own folder, right
-next to its `index.md` — not in a shared top-level `assets/` folder. See
-[`CONTRIBUTING.md`](CONTRIBUTING.md) for why.
+next to its `index.md`. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for why.
+
+Note: `logo.png` and `favicon.png` in `user_profile/images/` are the one
+exception — they're used on every page (sidebar header, browser tab), not
+just the homepage. They live there because there's no other page they'd
+make more sense next to, not because they're homepage-specific.
 
 **To add a new article, or a whole new section** (e.g. Zephyr): see
 [`CONTRIBUTING.md`](CONTRIBUTING.md) — it covers the front-matter contract

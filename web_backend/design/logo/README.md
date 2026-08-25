@@ -7,11 +7,11 @@ alternatives) as the one that's both personal (keeps the initial) and
 genuinely hardware-coded rather than decorative.
 
 - `trace-v-favicon.png` — white tile, ink trace + accent vias. Used as the
-  site favicon (`assets/images/favicon.png`).
+  site favicon (`user_profile/images/favicon.png`).
 - `trace-v-header.png` — transparent, single accent color throughout (has
   to read against both the light and dark sidebar without any
   theme-detection CSS). Used as the header/sidebar mark
-  (`assets/images/logo.png`).
+  (`user_profile/images/logo.png`).
 - `trace-v-on-white.png` / `trace-v-on-navy.png` — reference previews.
 
 Superseded a previous "Latent Lattice" oscilloscope-themed mark (removed

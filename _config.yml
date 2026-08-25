@@ -8,7 +8,7 @@ author: "Vivek Yadav"
 
 # Header/sidebar mark (Just the Docs renders this beside the site title)
 # and the image jekyll-seo-tag uses for the site's structured-data logo.
-logo: "/assets/images/logo.png"
+logo: "/user_profile/images/logo.png"
 
 remote_theme: just-the-docs/just-the-docs
 
